@@ -1,0 +1,13 @@
+import { SchemaType } from '../utils';
+import { restrict } from './utils';
+
+export default (
+  value,
+  { message, params = {}, name = 'includes', check } = {}
+) => ({
+  name,
+  test: (val, { resolve }) => val && val.includes(resolve(value)),
+  params: { value, ...params },
+  message,
+  check: check || restrict([SchemaType.STRING, SchemaType.ARRAY], name),
+});
