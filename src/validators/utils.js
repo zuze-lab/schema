@@ -60,7 +60,7 @@ export const restrict = (types, name, allowUndef = false) => (
   { type }
 ) => {
   if (!allowUndef && value === undefined) return false;
-  if (!types.includes(type) && type !== SchemaType.MIXED) {
+  if (types.length && !types.includes(type) && type !== SchemaType.MIXED) {
     warn(`Attempted to use ${name} validator on ${type} schema - skipping`);
     return false;
   }

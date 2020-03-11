@@ -21,8 +21,9 @@ const ref = path =>
       // self referencing
       if (path === '.') return DEF(value);
 
-      // context
-      if (path[0] === contextPrefix) return DEF(getter(path.slice(1))(context));
+      // context - safe getter if entry doesn't exist
+      if (path[0] === contextPrefix)
+        return DEF(getter(path.slice(1), true)(context));
 
       if (!from || !from.length) {
         throw new Error(

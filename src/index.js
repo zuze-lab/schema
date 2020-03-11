@@ -1,3 +1,6 @@
+import { createSchemas, createSchema, matches } from './ast';
+export { createSchemas, createSchema };
+export const ast = { matches, createSchema, createSchemas };
 export { default as cast } from './cast';
 export {
   default as validate,

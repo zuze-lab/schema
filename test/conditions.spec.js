@@ -8,6 +8,8 @@ import {
   number,
   boolean,
   string,
+  isValidSync,
+  reach,
 } from '../src';
 import { conditions, condition, when } from '../src/conditions';
 import { def } from '../src/utils';
@@ -65,13 +67,40 @@ describe('conditions', () => {
     expect(spy.mock.calls[0][0]).toBe('fred');
   });
 
+  it('should use ast', () => {
+    const schema = object({
+      field1: mixed(
+        conditions(
+          condition({
+            when: ['field2', 'field3'],
+            matches: { tests: ['required', ['is', 'jim']] },
+            how: 'some',
+            then: {
+              schema: 'number',
+              tests: [['min', 10]],
+            },
+            otherwise: {
+              schema: 'string',
+              tests: [['max', 5]],
+            },
+          })
+        )
+      ),
+    });
+
+    expect(isValidSync(schema, { field1: 5, field2: 'jim' })).toBe(false);
+    expect(isValidSync(schema, { field1: 10, field2: 'jim' })).toBe(true);
+    expect(isValidSync(schema, { field1: 'short' })).toBe(true);
+    expect(isValidSync(schema, { field1: 'not short' })).toBe(false);
+  });
+
   it('should throw an error if conditions is given a non-condition argument', () => {
     expect(() => conditions('not a condition')).toThrow();
   });
 
   it('should throw an error if given a malformed condition', () => {
     expect(() =>
-      condition({ when: 'field1', is: 'jim', then: mixed() })
+      condition({ blah: 'field1', is: 'jim', then: mixed() })
     ).toThrow(`Malformed condition`);
   });
 
