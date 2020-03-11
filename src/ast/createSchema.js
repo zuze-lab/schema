@@ -44,7 +44,7 @@ export const createSchema = (
         : undefined,
       of: of ? createSchema(of, options) : undefined,
       meta,
-      test: createValidators(tests || [], options),
+      test: createValidators(tests, options),
     },
     options
   );

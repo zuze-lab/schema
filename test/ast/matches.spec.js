@@ -150,6 +150,21 @@ describe('ast - matches', () => {
     expect(date).toBeInstanceOf(Date);
     expect(isNaN(date.getTime())).toBe(false);
   });
+
+  it('should throw an error', () => {
+    expect(() => createSchema({ schema: 'fred' })).toThrow();
+  });
+
+  it('should create an array schema', () => {
+    const schema = {
+      schema: 'array',
+      of: { schema: 'number', tests: [['min', 5]] },
+    };
+
+    expect(matches(schema, ['fred'])).toBe(false);
+    expect(matches(schema, [4])).toBe(false);
+    expect(matches(schema, [5, 7])).toBe(true);
+  });
 });
 
 /*
