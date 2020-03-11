@@ -12,7 +12,7 @@ It's a schema validator (like [yup](https://github.com/jquense/yup) or [joi](htt
 
 ## So why can't I use yup or joi or ajv?
 
-You can, they're great! The philosophy behind @zuze/schema was to:
+You can, they're great! The philosophy behind @zuze/schema is to:
 
 1. Be **functional/composable** (i.e. tree-shakable, only include the validators/transforms/schemas you actually need)
 
@@ -48,8 +48,8 @@ Preferred way of creating conditions is by using the AST form of an @zuze/schema
 {
     condition({
         when:{
-                fieldA: { tests:['required',['min',5]]},
-                fieldB: { tests:['required',['min',5]]}
+                fieldA: { tests:[ 'required', [ 'min', 5 ] ] },
+                fieldB: { tests:[ 'required', [ 'min', 5 ] ] }
         },
         then?: ...ast
         otherwise?: ...ast
@@ -60,15 +60,15 @@ Preferred way of creating conditions is by using the AST form of an @zuze/schema
 But you can also do it yup-like:
 
 ```js
-condition(['fieldA','fieldB'],{
-    is:'someVal',
-    then?: schema or func
-    otherwise?: schema or func
+condition([ 'fieldA', 'fieldB' ],{
+    is: 'someVal',
+    then?: schema or (schema) => nextSchema
+    otherwise?: schema or (schema) => nextSchema
 })
 
 // or 
 
-condition(['fieldA','fieldB'],(fieldA,fieldB,originalSchema) => nextSchema)
+condition([ 'fieldA', 'fieldB' ], (fieldA, fieldB, originalSchema) => nextSchema)
 ```
 
 ## AST
@@ -79,15 +79,6 @@ While @zuze/schema is a "functional" library, the power of it really lies in it'
 
 Declare a schema as JSON and then transform it into a zuze schema:
 
-when:[
-    {
-        fieldA:[ast],
-        fieldB:[ast]
-    }
-],
-then: ast,
-otherwise: ast
-
 ```js
 {
     schema: 'object' | 'array' | 'string' | 'mixed' | 'date' | 'boolean' | 'number',
@@ -95,18 +86,17 @@ otherwise: ast
     label: 'some label',
     tests:[
         'required', // the name of a validator
-        ['max',10] // if an array, the first entry is the name of a validator and all others are passed as arguments to the validator
-        ['is',{ref:'$field'}] // works with refs
-        ['oneOf',['1','2',{ref:'$field.path'}]], // and nested refs
+        [ 'max', 10 ], // if an array, the first entry is the name of a validator and all others are passed as arguments to the validator
+        [ 'is', { ref: '$field' } ], // works with refs
+        [ 'oneOf', [ '1', '2', { ref: '$field.path' } ] ], // and nested refs
     ],
     conditions:[
         when: {
-            fieldA:{tests:['required']},
-            fieldB:{tests:[['oneOf',['jim','joe','bill']]]}
+            fieldA: { tests: [ 'required' ] },
+            fieldB: { tests:[ [ 'oneOf', [ 'jim', 'joe', 'bill' ] ] ] }
         },
-        how:'some',
-        then: AST
-        otherwise: AST
+        then?: AST | Partial<AST>
+        otherwise?: AST | Partial<AST>
     ]
 
     // when schema is 'array' it can accept "of"
