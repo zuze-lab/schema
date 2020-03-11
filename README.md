@@ -48,8 +48,8 @@ Preferred way of creating conditions is by using the AST form of an @zuze/schema
 {
     condition({
         when:{
-                fieldA: { tests:[ 'required', [ 'min', 5 ] ] },
-                fieldB: { tests:[ 'required', [ 'min', 5 ] ] }
+                fieldA: { tests: [ 'required', [ 'min', 5 ] ] },
+                fieldB: { tests: [ 'required', [ 'min', 5 ] ] }
         },
         then?: ...ast
         otherwise?: ...ast
@@ -93,7 +93,7 @@ Declare a schema as JSON and then transform it into a zuze schema:
     conditions:[
         when: {
             fieldA: { tests: [ 'required' ] },
-            fieldB: { tests:[ [ 'oneOf', [ 'jim', 'joe', 'bill' ] ] ] }
+            fieldB: { tests: [ [ 'oneOf', [ 'jim', 'joe', 'bill' ] ] ] }
         },
         then?: AST | Partial<AST>
         otherwise?: AST | Partial<AST>
