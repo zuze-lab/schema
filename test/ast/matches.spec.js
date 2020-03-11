@@ -114,8 +114,9 @@ describe('ast - matches', () => {
         fieldA: {
           conditions: [
             {
-              when: ['fieldB'],
-              matches: { tests: [['is', 'jim'], 'required'] },
+              when: {
+                fieldB: { tests: [['is', 'jim'], 'required'] },
+              },
               then: {
                 schema: 'number',
                 tests: [['min', 10]],
@@ -165,6 +166,10 @@ describe('ast - matches', () => {
         ['oneOf',['1','2',{ref:'$field.path'}]], // and nested refs
     ],
     conditions:[
+        when: [{
+            fieldA: {ast}
+            fieldB: {ast}
+        }],
         when: ['fieldA','fieldB']
         matches: [
             [

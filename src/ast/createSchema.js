@@ -32,9 +32,7 @@ export const createSchema = (
     {
       default: () => def,
       label,
-      condition: conditions
-        ? conditions.map(({ when, ...rest }) => condition(when, rest))
-        : undefined,
+      condition: conditions ? conditions.map(condition) : undefined,
       shape: shape
         ? Object.entries(shape).reduce(
             (acc, [field, schema]) => ({

@@ -72,9 +72,10 @@ describe('conditions', () => {
       field1: mixed(
         conditions(
           condition({
-            when: ['field2', 'field3'],
-            matches: { tests: ['required', ['is', 'jim']] },
-            how: 'some',
+            when: [
+              { field2: { tests: ['required', ['is', 'jim']] } },
+              { field3: { tests: ['required', ['not', 'joe']] } },
+            ],
             then: {
               schema: 'number',
               tests: [['min', 10]],
