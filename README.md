@@ -4,21 +4,21 @@
 [![npm version](https://img.shields.io/npm/v/@zuze/schema.svg)](https://npmjs.org/package/@zuze/schema)
 --> 
 [![Coverage Status](https://coveralls.io/repos/github/zuze-lab/schema/badge.svg)](https://coveralls.io/github/zuze-lab/schema)
-[![Build Status](https://travis-ci.org/zuze-lab/schema.svg)](https://travis-ci.org/zuze-lab/schema)
+[![Build Status](https://travis-ci.com/zuze-lab/schema.svg)](https://travis-ci.com/zuze-lab/schema)
 
 ## What is this?
 
 It's a schema validator (like [yup](https://github.com/jquense/yup) or [joi](https://github.com/hapijs/joi) or [ajv](https://github.com/epoberezkin/ajv)).
 
-## So why can't I use yup or joi or ajv?
+## So why should I use this one?
 
-You can, they're great! The philosophy behind @zuze/schema is to:
+The philosophy behind @zuze/schema is to:
 
 1. Be **functional/composable** (i.e. tree-shakable, only include the validators/transforms/schemas you actually need)
 
-2. Be **configurable** (the exact opposite of 1) - via the AST - to create schema definitions that can be stored once and run ANYWEHRE.
+2. Be **configurable** (the exact opposite of 1) - via the [AST API](https://en.wikipedia.org/wiki/Abstract_syntax_tree) - to create schema definitions that can be stored once and run ANYWEHRE.
 
-@zuze/schema doesn't claim to be better (it's not) or faster (it's not) than any of the other schema validation projects, but it does aim to have a more fun whether you like to write code or configuration alike!
+@zuze/schema doesn't claim to be better (it's not) or faster (it's not) than any of the other schema validation projects, but it does aim to have a more fun API (whether you like to write functional code or appreciate some fine YML-like configuration via the AST API)!
 
 ## What are schema validators good for?
 
