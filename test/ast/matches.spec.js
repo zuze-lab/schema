@@ -137,6 +137,37 @@ describe('ast - matches', () => {
     expect(matches(schema, { fieldB: 'jim', fieldA: 10 })).toBe(true);
   });
 
+  it('should create a conditional schema using context', () => {
+    const schema = {
+      schema: 'mixed',
+      conditions: [
+        {
+          when: {
+            '#some.context.path': { tests: [['includes', 'joe']] },
+          },
+          then: {
+            schema: 'string',
+            tests: ['required', ['max', 5]],
+          },
+          otherwise: {
+            schema: 'number',
+            tests: ['required', ['min', 10]],
+          },
+        },
+      ],
+    };
+
+    const thenContext = { some: { context: { path: ['joe', 'bill'] } } };
+    const otherwiseContext = { some: { context: { path: ['fred', 'john'] } } };
+    const then = { contextPrefix: '#', context: thenContext };
+    const otherwise = { contextPrefix: '#', context: otherwiseContext };
+
+    expect(matches(schema, 'short', then)).toBe(true);
+    expect(matches(schema, 'not short', then)).toBe(false);
+    expect(matches(schema, 5, otherwise)).toBe(false);
+    expect(matches(schema, 10, otherwise)).toBe(true);
+  });
+
   it('should accept a date parser', () => {
     const schema = {
       schema: 'date',

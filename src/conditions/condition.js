@@ -38,17 +38,23 @@ const createWhenCondition = ({ when, how = 'some', then, otherwise }) => {
   );
 
   return {
-    resolve: (...next) =>
-      resolveBranch(
-        next.pop(),
+    withOpts: true,
+    resolve: (...next) => {
+      const { schema, options } = next.pop();
+      return resolveBranch(
+        schema,
         whens[how](w =>
           Object.entries(w).every(([field, ast]) =>
-            matches(ast, next[keys.findIndex(f => f === field)])
+            matches(ast, next[keys.findIndex(f => f === field)], {
+              ...options,
+              sync: true,
+            })
           )
         )
           ? then
           : otherwise
-      ),
+      );
+    },
     refs: keys,
   };
 };
