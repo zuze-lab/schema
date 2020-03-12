@@ -48,16 +48,16 @@ Preferred way of creating conditions is by using the AST form of an @zuze/schema
 {
     condition({
         when:{
-                fieldA: { tests: [ 'required', [ 'min', 5 ] ] },
-                fieldB: { tests: [ 'required', [ 'min', 5 ] ] }
+            fieldA: { tests: [ 'required', [ 'min', 5 ] ] },
+            fieldB: { tests: [ 'required', [ 'min', 5 ] ] }
         },
-        then?: ...ast
-        otherwise?: ...ast
+        then: { schema: 'string', tests: [ 'required', [ 'matches', /joe/ ] ] },
+        otherwise: { schema: 'number', tests: [ 'required', [ 'between', 10, 20 ] ] }
     })
 }
 ```
 
-But you can also do it yup-like:
+But you can also do it like [yup](https://github.com/jquense/yup#mixedwhenkeys-string--arraystring-builder-object--value-schema-schema-schema) or [joi](https://hapi.dev/family/joi/api/?v=17.1.0#alternativesconditionalcondition-options):
 
 ```js
 condition([ 'fieldA', 'fieldB' ],{
