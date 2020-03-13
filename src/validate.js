@@ -157,4 +157,7 @@ export const getErrors = (schema, values, options) => {
     .catch(resolve);
 };
 
+export const getErrorsSync = (schema, values, options = {}) =>
+  getErrors(schema, values, { ...options, sync: true });
+
 export default validate;

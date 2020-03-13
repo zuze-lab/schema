@@ -7,7 +7,7 @@
   "files": [
     "build"
   ],
-  "keywords":[
+  "keywords": [
     "form",
     "validation",
     "functional",
@@ -26,23 +26,17 @@
   "author": "Adam Jenkins",
   "license": "ISC",
   "dependencies": {
-    "@babel/runtime": "7.6.0",
+    "@babel/runtime": "^7.8.7",
     "property-expr": "^1.5.1"
   },
   "optionalDependencies": {
     "date-fns": "^2.9.0"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^6.0.0",    
-    "lodash": "^4.17.15",    
-    "rollup": "^1.21.4",
-    "rollup-plugin-babel": "^4.3.3",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "sugar-date": "^2.0.6",
-    "yup": "^0.28.1",
     "@babel/core": "^7.6.0",
     "@babel/plugin-transform-runtime": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
+    "@rollup/plugin-node-resolve": "^6.0.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^25.1.0",
     "coveralls": "^3.0.9",
@@ -52,6 +46,12 @@
     "eslint-plugin-jest": "^22.17.0",
     "eslint-plugin-prettier": "^3.1.0",
     "jest": "^25.1.0",
-    "prettier": "^1.18.2"
+    "lodash": "^4.17.15",
+    "prettier": "^1.18.2",
+    "rollup": "^1.21.4",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "sugar-date": "^2.0.6",
+    "yup": "^0.28.1"
   }
 }

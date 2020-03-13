@@ -12,6 +12,7 @@ export {
   validateAt,
   validateSyncAt,
   getErrors,
+  getErrorsSync,
 } from './validate';
 export { default as reach } from './reach';
 export { extend } from './schema';
