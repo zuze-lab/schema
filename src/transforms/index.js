@@ -11,5 +11,5 @@ export {
   stripKeys,
   stripUnknown,
 } from './object';
-export { default as array, compact, unique, exclude, only } from './array';
+export { default as array, compact, unique } from './array';
 export * from './utils';
