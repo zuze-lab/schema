@@ -6,6 +6,7 @@ export const isSchema = ({ __isSchema } = {}) => !!__isSchema;
 
 export default ({
   type,
+  typeError,
   typeCheck,
   test = [],
   transform = [],
@@ -21,6 +22,7 @@ export default ({
   typeCheck: typeCheck ? typeCheck : () => true,
   type: type || MIXED,
   test,
+  typeError,
   transform,
   condition,
   meta,
@@ -85,6 +87,7 @@ export const merge = (def, ...defs) =>
     (acc, def) => ({
       __isSchema: true,
       ...mergeTypes(def, acc),
+      typeError: acc.typeError || def.typeError,
       test: filterValidators(filterSame(acc.test, def.test)),
       transform: filterSame(acc.transform, def.transform),
       condition: filterSame(acc.condition, def.condition),

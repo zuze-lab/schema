@@ -27,7 +27,7 @@ export { default as lazy } from './lazy';
 export { default as ref, isRef } from './ref';
 export { default as conditional } from './conditional';
 export * from './validators';
-export * from './conditions';
+export { when, conditions, condition } from './conditions';
 export * from './without';
 export {
   warnings,
@@ -38,4 +38,5 @@ export {
   nullable,
   meta,
   errors,
+  typeError,
 } from './utils';

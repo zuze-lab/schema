@@ -1,7 +1,16 @@
-import { array, object, conditional, mixed, cast, string, of } from '../src';
+import {
+  array,
+  object,
+  conditional,
+  mixed,
+  cast,
+  string,
+  of,
+  validateSync,
+} from '../src';
 import { condition } from '../src/conditions';
-import { def } from '../src/utils';
-import { tests, min } from '../src/validators';
+import { def, nullable } from '../src/utils';
+import { tests, min, required } from '../src/validators';
 
 describe('array', () => {
   it('should construct', () => {
@@ -24,5 +33,11 @@ describe('array', () => {
 
     cast(arr, { field: ['a'] });
     expect(spy.mock.calls[0][0]).toBe('fred');
+  });
+
+  it('should result in null if it cannot be cast', () => {
+    const inner = string(tests(required()));
+    expect(cast(array(nullable(), of(inner)), 'joe')).toBeNull();
+    expect(validateSync(array(nullable(), of(inner)), 'joe')).toBeNull();
   });
 });

@@ -24,32 +24,29 @@ const errors = (run, last, { sync, abortEarly }) => {
 };
 
 // inner is either an object a single schema for an array, or multiple schemas for an array
-export default (inner, schema, value, options) => {
-  if (isSchema(inner))
-    return (value || []).reduce(
-      (acc, v, idx) =>
-        errors(
-          tick(inner, v, extendOptions(schema, value, idx, options)),
-          acc,
-          options
-        ),
-      []
-    );
-
-  // object
-  return Object.entries(inner || {}).reduce(
-    (acc, [key, schemaOrRef]) =>
-      isRef(schemaOrRef)
-        ? acc
-        : errors(
-            tick(
-              schemaOrRef,
-              value[key],
-              extendOptions(schema, value, key, options)
-            ),
+export default (inner, schema, value, options) =>
+  isSchema(inner)
+    ? (value || []).reduce(
+        (acc, v, idx) =>
+          errors(
+            tick(inner, v, extendOptions(schema, value, idx, options)),
             acc,
             options
           ),
-    []
-  );
-};
+        []
+      )
+    : Object.entries(inner).reduce(
+        (acc, [key, schemaOrRef]) =>
+          isRef(schemaOrRef)
+            ? acc
+            : errors(
+                tick(
+                  schemaOrRef,
+                  value[key],
+                  extendOptions(schema, value, key, options)
+                ),
+                acc,
+                options
+              ),
+        []
+      );

@@ -10,21 +10,22 @@ export const errorCreator = (value, name, options, schema) => ({
   message,
   params = {},
   name: nestedName, // needed for serial
-} = {}) =>
-  new ValidationError(
+} = {}) => {
+  const label =
+    typeof schema.label === 'function' ? schema.label() : schema.label;
+  const p = { label: label || options.path || 'field', ...params };
+  return new ValidationError(
     {
       value,
       path: options.path,
       schema: schema.type,
-      params: {
-        label: schema.label || options.path || 'field',
-        ...params,
-      },
-      message: typeof message === 'function' ? message(params) : message,
+      params: p,
+      message: typeof message === 'function' ? message(p) : message,
       type: nestedName || name,
     },
     options
   );
+};
 
 export const isValidator = test => {
   if (!test || !test.name || typeof test.test !== 'function')

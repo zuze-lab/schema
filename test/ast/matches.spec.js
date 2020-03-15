@@ -70,7 +70,7 @@ describe('ast - matches', () => {
   });
 
   it('should use custom validators', () => {
-    const gt3 = () => t('gt3', v => v > 3);
+    const gt3 = () => () => t('gt3', v => v > 3);
     const schema = { schema: 'number', tests: ['gt3'] };
     expect(matches(schema, 4, { validators: { gt3 } })).toBe(true);
     expect(matches(schema, 3, { validators: { gt3 } })).toBe(false);

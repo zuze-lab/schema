@@ -1,4 +1,4 @@
-import { boolean, cast } from '../src';
+import { boolean, cast, validateSync, typeError } from '../src';
 
 describe('boolean', () => {
   it('should cast a string or a number', () => {
@@ -13,5 +13,11 @@ describe('boolean', () => {
 
     // cannot be cast
     expect(() => cast(boolean(), 'ture')).toThrow();
+  });
+
+  it('should respect typeErrors', () => {
+    expect(() => validateSync(boolean(typeError('not gud')), 'ture')).toThrow(
+      'not gud'
+    );
   });
 });

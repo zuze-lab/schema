@@ -13,6 +13,8 @@ const defaultMessages = {
   is: '${label} must be ${value}',
   includes: '${label} must include ${value}',
   matches: '${label} must match ${regexp}',
+  typeError:
+    '${label} must be a ${schema} type, unable to coerce/use value ${value}',
   oneOf: ({ label, values }) =>
     `${label} must be ${
       values.length === 1 ? values[0] : `one of ${values.join(', ')}`

@@ -15,6 +15,7 @@ export { default as same } from './same';
 export { default as different } from './different';
 export { default as noUnknown } from './noUnknown';
 export { default as includes } from './includes';
+export { default as combine } from './combine';
 export {
   tests,
   test,

@@ -6,9 +6,24 @@ import array from '../array';
 import string from '../string';
 import mixed from '../mixed';
 import { condition } from '../conditions';
-import { createValidators } from './createValidator';
+import { createValidators } from './createValidators';
+import { createTransforms } from './createTransforms';
+import * as astTransforms from './transforms';
+import * as astValidators from './validators';
 
 const schemas = { object, number, boolean, date, array, string, mixed };
+
+const defaults = (options = {}) => ({
+  ...options,
+  transforms: {
+    ...astTransforms,
+    ...(options.transforms || {}),
+  },
+  validators: {
+    ...astValidators,
+    ...(options.validators || {}),
+  },
+});
 
 const make = (type, def, options = {}) => {
   const use = type || 'mixed';
@@ -24,14 +39,29 @@ export const createSchemas = (defs, options) =>
   (Array.isArray(defs) ? defs : [defs]).map(d => createSchema(d, options));
 
 export const createSchema = (
-  { schema, tests = [], default: def, meta, label, shape, of, conditions },
+  {
+    schema,
+    tests = [],
+    transforms = [],
+    default: def,
+    meta,
+    typeError,
+    label,
+    shape,
+    of,
+    nullable,
+    conditions,
+  },
   options
-) =>
-  make(
+) => {
+  options = defaults(options);
+  return make(
     schema,
     {
       default: () => def,
-      label,
+      label: () => label,
+      nullable,
+      typeError,
       condition: conditions ? conditions.map(condition) : undefined,
       shape: shape
         ? Object.entries(shape).reduce(
@@ -45,6 +75,8 @@ export const createSchema = (
       of: of ? createSchema(of, options) : undefined,
       meta,
       test: createValidators(tests, options),
+      transform: createTransforms(transforms, options),
     },
     options
   );
+};

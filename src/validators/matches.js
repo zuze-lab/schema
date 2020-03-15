@@ -1,9 +1,13 @@
 import { SchemaType } from '../utils';
 import { restrict } from './utils';
 
-const test = (regexp, validateEmpty) => value =>
-  (!validateEmpty && !value) ||
-  !!value.match(typeof regexp === 'string' ? new RegExp(regexp) : regexp);
+const test = (regexp, validateEmpty) => value => {
+  if (!validateEmpty && !value) return true;
+  const r = Array.isArray(regexp) ? regexp : [regexp];
+  return r.some(
+    exp => !!value.match(typeof exp === 'string' ? new RegExp(exp) : exp)
+  );
+};
 
 const matches = (
   regexp,

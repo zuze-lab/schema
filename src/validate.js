@@ -54,8 +54,39 @@ const validate = (schema, value, options) => {
   const { abortEarly, sync, recursive } = options;
   const { inner, test } = schema;
 
+  const done = results => {
+    if (results.length)
+      throw new ValidationError(
+        abortEarly ? [new ValidationError(results[0], options)] : results,
+        { value, ...options }
+      );
+    return value;
+  };
+
+  const complete = errs =>
+    sync
+      ? done(errs)
+      : Promise.all(errs).then(e => done(e.filter(e => e !== undefined)));
+
   // cast it before validating
-  value = cast(schema, value, options);
+  try {
+    value = cast(schema, value, options);
+  } catch (err) {
+    return complete([
+      err.name === 'TypeError'
+        ? errorCreator(
+            value,
+            'typeError',
+            options,
+            schema
+          )({
+            message: schema.typeError,
+            params: { value, schema: schema.type },
+          })
+        : err,
+    ]);
+  }
+
   const innerSchema = inner && inner(schema);
   const errs = test.reduce(
     (acc, validator) => {
@@ -87,18 +118,7 @@ const validate = (schema, value, options) => {
       : []
   );
 
-  const done = results => {
-    if (results.length)
-      throw new ValidationError(
-        abortEarly ? [new ValidationError(results[0], options)] : results,
-        { value, ...options }
-      );
-    return value;
-  };
-
-  return sync
-    ? done(errs)
-    : Promise.all(errs).then(e => done(e.filter(e => e !== undefined)));
+  return complete(errs);
 };
 
 export const validateSync = (schema, value, options = {}) =>

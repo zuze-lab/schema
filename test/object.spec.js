@@ -1,6 +1,15 @@
-import { object, mixed, cast } from '../src';
-import { def } from '../src/utils';
-import { shape } from '../src/object';
+import * as yup from 'yup';
+import {
+  object,
+  mixed,
+  cast,
+  required,
+  tests,
+  nullable,
+  shape,
+  def,
+  string,
+} from '../src';
 
 describe('object', () => {
   it('should construct', () => {

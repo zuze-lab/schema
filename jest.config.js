@@ -1,4 +1,7 @@
 module.exports = {
+  moduleNameMapper: {
+    '@zuze/schema': '<rootDir>/src',
+  },
   coverageThreshold: {
     global: {
       branches: 90,

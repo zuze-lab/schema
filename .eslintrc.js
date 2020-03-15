@@ -14,6 +14,11 @@ module.exports = {
       node: {
         paths: ['./src'],
       },
+      alias: {
+        map: [
+          ['@zuze/schema','./src']
+        ]
+      }
     }
   },
   extends: [
@@ -38,7 +43,9 @@ module.exports = {
     'import/namespace': 0,
     'import/no-self-import': 2,
     'import/first': 2,
-    'import/order': 2,
+    'import/order': ['error',{
+      'newlines-between':'never'
+    }],
     'import/no-named-as-default': 0
   },
   overrides: [

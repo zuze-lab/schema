@@ -19,3 +19,4 @@ export const meta = createSetter('meta');
 export const label = createSetter('label');
 export const def = createSetter('default');
 export const lazy = createSetter('lazy');
+export const typeError = createSetter('typeError');

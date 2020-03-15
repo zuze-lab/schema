@@ -1,4 +1,4 @@
-export { default as string } from './string';
+export { default as string, trim, uppercase, lowercase } from './string';
 export { default as boolean } from './boolean';
 export { default as date } from './date';
 export { default as number } from './number';
@@ -11,5 +11,5 @@ export {
   stripKeys,
   stripUnknown,
 } from './object';
-export { default as array, compact, unique } from './array';
+export { default as array, compact, unique, exclude, only } from './array';
 export * from './utils';
