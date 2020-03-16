@@ -6,6 +6,7 @@ import {
   stripUnknown,
   keys,
   from,
+  allowKeys,
 } from '../../src/transforms';
 
 describe('transforms - object', () => {
@@ -26,6 +27,20 @@ describe('transforms - object', () => {
     expect(cast(withKeys, subject)).not.toHaveProperty('b');
 
     expect(cast(withoutKeys, subject)).toEqual({});
+  });
+
+  it('should whitelist keys', () => {
+    const subject = {
+      a: 'jim',
+      b: 'fred',
+      c: 'jane',
+    };
+    expect(
+      cast(object(transforms(allowKeys('a', 'c'))), subject)
+    ).toStrictEqual({
+      a: 'jim',
+      c: 'jane',
+    });
   });
 
   it('should strip specified keys', () => {

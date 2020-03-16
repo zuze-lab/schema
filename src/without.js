@@ -11,6 +11,6 @@ export const without = (what, original, ...refs) =>
     type: original.type,
   });
 
-// remove all conditions/tests in a functional way
+// remove all conditions/tests/transforms in a functional way
 export const withoutAny = (what, original) =>
   without(what, original, ...original[what]);

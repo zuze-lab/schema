@@ -35,8 +35,8 @@ const cast = (schema, value, options) => {
   const { transform, inner, default: def } = schema;
 
   value = check(
-    // transforms are ignored when value is undefined or in strict mode
-    value === undefined || strict
+    // transforms are ignored when value is null, undefined or in strict mode
+    value === null || value === undefined || strict
       ? value
       : transform.reduce(
           (acc, fn) => fn(acc, value, { schema, options }),

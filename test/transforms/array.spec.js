@@ -34,7 +34,7 @@ describe('transforms - array', () => {
     ]);
   });
 
-  it('should unique by', () => {
+  it('should unique by (function)', () => {
     const subject = [
       { name: 'jim' },
       { name: 'fred' },
@@ -45,6 +45,25 @@ describe('transforms - array', () => {
     ];
 
     const t = unique((a, b) => a.name === b.name);
+    expect(cast(array(transforms(t)), subject)).toEqual([
+      { name: 'jim' },
+      { name: 'fred' },
+      { name: 'bill' },
+      { name: 'joe' },
+    ]);
+  });
+
+  it('should unique by (property)', () => {
+    const subject = [
+      { name: 'jim' },
+      { name: 'fred' },
+      { name: 'bill' },
+      { name: 'jim' },
+      { name: 'joe' },
+      { name: 'bill' },
+    ];
+
+    const t = unique('name');
     expect(cast(array(transforms(t)), subject)).toEqual([
       { name: 'jim' },
       { name: 'fred' },

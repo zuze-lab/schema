@@ -21,9 +21,13 @@ export const AstFn = ({ children, link }) => {
     <>
       <ZuzeTabs tabs={['ast', 'functional']}>{children}</ZuzeTabs>
       {link && (
-        <a target="_blank" href={link}>
-          Try it on CodeSandbox!
-        </a>
+        <>
+          <a target="_blank" href={link}>
+            Try it on CodeSandbox!
+          </a>
+          <hr />
+          <br />
+        </>
       )}
     </>
   );

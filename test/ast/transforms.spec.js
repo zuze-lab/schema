@@ -47,4 +47,27 @@ describe('ast - transforms', () => {
     expect(cast(createSchema(schema), subject)).toHaveLength(2);
     expect(cast(createSchema(schema), null)).toBeNull();
   });
+
+  it('should strip/allow with object', () => {
+    const tests = [
+      { key: { tests: [['is', 'jim']] } },
+      { value: { tests: [['is', 'first']] } },
+    ];
+    const strip = { transforms: [['stripWhere', tests]] };
+    const allow = { transforms: [['allowWhere', tests]] };
+
+    const value = {
+      jim: 'nice!',
+      fred: 'first',
+      jane: 'ok',
+    };
+
+    expect(
+      cast(createSchema({ schema: 'object', ...strip }), value)
+    ).toStrictEqual({ jane: 'ok' });
+
+    expect(
+      cast(createSchema({ schema: 'object', ...allow }), value)
+    ).toStrictEqual({ jim: 'nice!', fred: 'first' });
+  });
 });

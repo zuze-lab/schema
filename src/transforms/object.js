@@ -17,10 +17,13 @@ export const entries = fn => value =>
     {}
   );
 
-export const strip = fn =>
-  entries((key, value) => (fn(key, value) ? { [key]: value } : {}));
+export const stripWhere = fn =>
+  entries((key, value) => fn(key, value) || { [key]: value });
 
-export const stripKeys = (...keys) => strip(key => !keys.includes(key));
+export const allowWhere = fn => stripWhere((key, value) => !fn(key, value));
+
+export const stripKeys = (...keys) => stripWhere(key => keys.includes(key));
+export const allowKeys = (...keys) => allowWhere(key => keys.includes(key));
 
 // transform applied to keys
 // e.g.
@@ -37,4 +40,4 @@ export const from = (frm, to, alias = false) =>
   );
 
 export const stripUnknown = () => (value, original, { schema }) =>
-  strip(key => Object.keys(schema.shape || {}).includes(key))(value);
+  stripWhere(key => !Object.keys(schema.shape || {}).includes(key))(value);

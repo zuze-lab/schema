@@ -58,8 +58,8 @@ export const createSchema = (
   return make(
     schema,
     {
-      default: () => def,
-      label: () => label,
+      default: def,
+      label: label,
       nullable,
       typeError,
       condition: conditions ? conditions.map(condition) : undefined,

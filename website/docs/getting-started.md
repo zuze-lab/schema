@@ -8,7 +8,7 @@ import { AstFn, ZuzeTabs } from '../src/examples/tabs';
 
 ## Forward
 
-*@zuze/schema* was created out of love and admiration for projects like [joi](https://github.com/hapijs/joi), [yup](https://github.com/jquense/yup), and [ajv](https://github.com/epoberezkin/ajv) which are all schema validators. Each package brings it's own strengths. The strength (I hope) that `@zuze/schema` brings is that it's fun to use, whether you're somebody who likes to write functional code or somebody who likes to write highly reusable configuration (who doesn't love a some good [YAML](https://www.reddit.com/r/ProgrammerHumor/comments/9fhvyl/writing_yaml/)....but we use JSON.)
+**@zuze/schema** was created out of love and admiration for projects like [joi](https://github.com/hapijs/joi), [yup](https://github.com/jquense/yup), and [ajv](https://github.com/epoberezkin/ajv) which are all schema validators. Each package brings it's own strengths. The strength (I hope) that `@zuze/schema` brings is that it's fun to use, whether you're somebody who likes to write functional code or somebody who likes to write highly reusable configuration (who doesn't love a some good [YAML](https://www.reddit.com/r/ProgrammerHumor/comments/9fhvyl/writing_yaml/)....but we use JSON.)
 
 *@zuze/schema* is one package that comes in two flavors - [functional](https://en.wikipedia.org/wiki/Functional_programming) or [ast](https://en.wikipedia.org/wiki/Abstract_syntax_tree).
 
@@ -18,7 +18,7 @@ More on that after the set up:
 
 ## Installation 
 
-Install @zuze/schema using yarn or npm
+Install **@zuze/schema** using yarn or npm
 
 <ZuzeTabs tabs={['npm','yarn']}>
 
@@ -36,7 +36,7 @@ yarn install @zuze/schema
 
 Let's start by creating some very simple schemas:
 
-<AstFn link={'https://codesandbox.io/s/zuze-schema-getting-started-d8q04'}>
+<AstFn>
 
 ```js
 import { ast } from '@zuze/schema'
