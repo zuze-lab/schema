@@ -8,14 +8,17 @@ import { AstFn, ZuzeTabs } from '../src/examples/tabs';
 
 ## About Schemas
 
-A schema definition looks, quite literally, like this:
+A SchemaDefinition looks, quite literally, like this:
 
 ```js
 {
-    default: value | Function;
-    meta: value | Function;
-    label: string | Function;
-    typeError: string | Function; // error message/message function on validation if value cannot be coerced
+    default?: value | Function; // default value for this schema if the value is undefined
+    meta?: value | Function;
+    label?: string | Function;
+    shape?: {[key: string]: SchemaDefinition }; // for object schemas
+    of?: SchemaDefinition; // for array schemas
+    typeCheck?: Function; // determines if the final cast value (after transformations) is the appropriate type    
+    typeError: string | Function; // error message/message function on validation if value doesn't pass the typeCheck
     test: ValidatorDef[]; // validations to be run
     transform: TransformFn[]; // transforms applied (usually to coerce values)
     condition: ConditionDef[]; // conditions that can be used to modify a schema
@@ -23,7 +26,7 @@ A schema definition looks, quite literally, like this:
 }
 ```
 
-Schema definitions can be created using AST or functionally with the help of [utility methods](utilities.md)
+SchemaDefinitions can be created using AST or functionally with the help of [utility methods](utilities.md)
 
 <AstFn>
 
@@ -37,12 +40,12 @@ const firstName = {
     default: 'joe', // default value for this field is joe
     nullable: false,
     label: 'firstName',
-    tests:['required'],
+    tests: ['required'],
     conditions:[
         {
-            when: { lastName: { tests: [['is','smith']] } }, // if the lastName field is smith...
-            then: { tests: [['min',10]] }, // then this field should be at least 10 characters
-            otherwise: { tests: [['min',20]] } // otherwise it only needs to be 5 characters
+            when: { lastName: { tests: [['is', 'smith']] } }, // if the lastName field is smith...
+            then: { tests: [['min', 10]] }, // then this field should be at least 10 characters
+            otherwise: { tests: [['min', 20]] } // otherwise it only needs to be 5 characters
         }
     ]
 };
@@ -95,11 +98,11 @@ Partial definitions can be passed as arguments to any [schema constructor](#sche
 ```js
 import { mixed, label, def } from '@zuze/schema';
 
-mixed(label('my string'),def('joe')); 
+mixed(label('my string'), def('joe')); 
 
 // is equivalent to
 
-mixed({ label: 'my string', 'default': 'joe' })
+mixed({ label: 'my string', default: 'joe' })
 
 ```
 
