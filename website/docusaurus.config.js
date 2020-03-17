@@ -1,6 +1,6 @@
 module.exports = {
   title: 'Zuze',
-  tagline: 'Composable/configurable validation schema (and more!)',
+  tagline: 'Composable/configurable validation schema',
   url: 'https://zuze-lab.github.io',
   baseUrl: '/schema/',
   favicon: '',
