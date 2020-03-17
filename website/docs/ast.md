@@ -86,7 +86,7 @@ const schema = {
 
 ## Custom Transforms/Validators
 
-By default, all transforms/validators available in **@zuze/schema** are available via the AST. But part of the beauty of **@zuze/schema** is being able to [create your own transforms/validators](creating-validators-transforms.md). 
+By default, all transforms/validators available in **@zuze/schema** are available via the AST. But part of the beauty of **@zuze/schema** is being able to [create your own transforms/validators](extending.md). 
 
 When using the AST, each custom transform/validator must be a function (called with the `options` passed to [`createSchema(s)`](#createSchemas)/[`matches`](#matches) that returns a function called with the arguments in the AST.
 
