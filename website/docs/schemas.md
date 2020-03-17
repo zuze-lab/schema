@@ -182,6 +182,26 @@ A date schema is the first deviation from the regular pattern. Instead of only a
 
 Providing your own parser allows you to tree-shake date-fns if you don't need it, or it also allows you to do some really cool [relative date parsing](https://sugarjs.com/dates/#/Parsing) using other libraries.
 
+<AstFn>
+
+```js
+import { Date as SugarDate } from 'sugar-date';
+import { ast, cast } from '@zuze/schema';
+const { createSchema } = ast;
+
+const schema = createSchema({schema: 'date'},{dateParser:SugarDate.create});
+cast(schema, 'last wednesday'); //Wed Mar 11 2020 00:00:00 GMT-0300 (Atlantic Daylight Time)
+```
+
+```js
+import { Date as SugarDate } from 'sugar-date';
+import { cast, date } from '@zuze/schema';
+
+cast(date(SugarDate.create), 'last wednesday'); //Wed Mar 11 2020 00:00:00 GMT-0300 (Atlantic Daylight Time)
+```
+
+</AstFn>
+
 ### lazy
 
 A lazy schema has no AST-equivalent because it doesn't need one. It's for developers who like to write functional code. 
