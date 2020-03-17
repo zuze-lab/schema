@@ -4,7 +4,9 @@ title: Conditions
 sidebar_label: Conditions
 ---
 
-**@zuze/schema** aims to boil complicated conditional logic when it comes to schema validation down to a very simple and intuitive API.
+import { AstFn, ZuzeTabs } from '../src/examples/tabs';
+
+Conditions are arguably the most powerful part of **@zuze/schema**. Some methods to handle conditional validations is present in virtually all schemas, but **@zuze/schema** aims to to boil complicated conditional logic when it comes to schema validation down to a very simple and intuitive API (especially via the [AST](ast.md#ASTCondition))
 
 Schemas can be conditional based on two properties, 
 
@@ -16,7 +18,6 @@ Both of which are accessible via [refs](#refs)
 ## Creating Conditions
 
 There are multiple supported syntaxes to create conditions, almost all of which are based on a WTO (when-then-otherwise) concept. Arguably the easiest to understand is [AST](ast.md#conditions) format.
-
 
 ### Functional
 
@@ -48,7 +49,6 @@ const conditional = string(
 `when` can also accept an object format as it's second argument
 
 ```js
-
 // then or otherwise do not both need to specified, but at least one of them is required
 
 const conditional = string(
@@ -70,7 +70,6 @@ isValidSync(schema, {fieldA: 8, c: 19}); // true
 The AIM of AST syntax is to be extremely readable:
 
 ```js
-
 const conditional = createSchema({
     schema: 'string',
     tests: ['required'],
@@ -94,22 +93,93 @@ isValidSync(schema, {fieldA: 8, c: 19}); // true
 
 ## Refs
 
-A ref (i.e. reference) is a pointer to a sibling/relative field being validated
+A ref (i.e. reference) is a pointer to a sibling/ancestor in the value that is being validated or a value from context. They are used in [validators](#validators.md) (where supported) and to resolve conditional schemas. 
+
+Refs are also accessed via the path notation using [getter](https://www.npmjs.com/package/property-expr#getterexpression--safeaccess-) from [property-expr](https://www.npmjs.com/package/property-expr)
+
+<AstFn>
+
+```js
+{
+    schema: 'string',
+    tests: [['is', { ref: '$ctx.prop' }]]
+}
+```
+
+```js
+string(tests(is(ref('$ctx.prop'))));
+```
+
+</AstFn>
 
 ### Sibling
 
-Sibling references are accessed by specifying the field name.
+Sibling references are accessed by specifying the object property.
+
+<AstFn>
+
+```js
+{
+    schema: 'object',
+    shape: {
+        fieldA: {
+            tests: [['oneOf', [{ ref: 'fieldB' }, { ref: 'fieldC' }]]]
+        },
+        fieldB: { schema: 'string' },
+        fieldC: {
+            schema: 'object',
+            shape: {
+                fieldD: { schema: 'string' }
+            }
+        }
+    }
+}
+```
+
+```js
+object({
+    fieldA: mixed(tests(oneOf([
+        ref('fieldB'),
+        ref('fieldC.fieldD')
+    ]))),
+    fieldB: string(),
+    fieldC: object({
+        fieldD: string()
+    })
+})
+```
+
+</AstFn>
 
 ### Context
 
 Context can also be used to resolve conditions. Context is accessed using a special prefix (`$` by default, but this can be changed by setting the `contextPrefix` option when casting/validating a schema). 
 
-### Self-Reference
+<AstFn>
 
-A self-reference is accessed by doing `ref(.)` This is actually how [lazy](schemas.md#lazy) are created.
+```js
+{
+    schema: 'string',
+    conditions: [
+        {
+            when: { '$ctx.prop': { tests: [['is',5]] } },
+            then: { tests: [['min',5]] },
+            otherwise: { tests: [['min', {ref:'$ctx.otherProp'}]]}
+        }
+    ]
+}
+```
 
-### Relative
+```js
+string(
+    conditions(
+        when('$ctx.prop',{
+            is:5,
+            then: tests(min(5)),
+            otherwise: tests(min(ref('$ctx.otherProp')))
+        })
+    )
+)
+```
 
-**@zuze/schema** also allows accessing relative refs with a special syntax using `.`.
-
-If a string key is prefaced by one or more dots (`.`) then it will be resolved relatively. The presence of one dot (`.field3`) means go "up one level", two dots (`..field3`) means go up two levels, etc.
+</AstFn>

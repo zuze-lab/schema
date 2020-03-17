@@ -4,11 +4,15 @@ title: AST
 sidebar_label: AST
 ---
 
+import { AstFn, ZuzeTabs } from '../src/examples/tabs';
+
 The Abstract Syntax Tree (AST) format for **@zuze/schema** is intuitive. It mirrors the functional API virtually completely. 
 
 ## Passing Arguments
 
 When it comes to `tests` and `transforms`, each item in the array is evaluated as a function name. Or, in the case of the item in the array being an array itself, the first item is used as the function name and all subsequent values in the array will be passed to it as arguments.
+
+<AstFn>
 
 ```js
 {
@@ -16,34 +20,33 @@ When it comes to `tests` and `transforms`, each item in the array is evaluated a
     tests: [ 'required', ['min', 5, { message: 'At least 5 items required' } ] ],
     transforms: [ 'compact' ]
 }
+```
 
-// functional equvialent
+```js
 array(
     tests( required(), min(5, { message: 'At least 5 items required' } )),
     transforms( compact() )
 )
 ```
 
+</AstFn>
+
 ### Conditions
 
-Using the AST API conditions is an array of condition objects:
+Using the AST API conditions is an array of [ASTCondition](#astcondition) objects:
 
 ```js
 // ConditionObject
+
 when: ObjectAST | ObjectAST[],
 then?: Partial<AST>,
 otherwise?: Partial<AST>
 
-// ObjectAST
-{
-    [key: string]: AST | AST[]
-}
 ```
 
 When `when` is an array, if ANY of the [`ObjectAST's`](#objectast) are matched (using [matches](#matches)), the `then` will be applied (if present). If not, the `otherwise` will be applied (if present).
 
 ```js
-
 const schema = {
     schema: 'mixed',
     conditions: [
@@ -62,8 +65,23 @@ const schema = {
         }
     ]
 }
+```
 
+### Refs
 
+Refs are created in AST via [ASTRef](#astref)
+
+```js
+const schema = {
+    schema: 'string',
+    conditions: [
+        {
+            when: {
+                fieldA: [['is',{ref:'fieldB'}]]
+            }
+        }
+    ]
+}
 ```
 
 ## Custom Transforms/Validators
@@ -83,7 +101,6 @@ const customASTTransform = options => (...args) => TransFormFunction
 The user-supplied transforms/validators need to be given in options argument of [`createSchema(s)`](#createSchemas)/[`matches`](#matches).
 
 ```js
-
 const schema = {
     schema:'mixed',
     transforms:[ ['customASTTransform', 'arg1', 'arg2'] ],
@@ -160,12 +177,12 @@ const schema = {
 
 ### serial
 
-As you'll remember, [serial](validators.md#serial) is a validator that 
+As you'll remember, [serial](validators.md#serial) is a validator that runs the ValidatorDefinitions passed to it sequentially, stopping after the first one fails. It's only necessary when dependent async validations.
 
 ```js
 const schema = {
     schema: 'number',
-    tests: [['serial',['between',10,20]]]
+    tests: [['serial', [['between', 10, 20]]]]
 }
 ```
 
@@ -173,58 +190,49 @@ const schema = {
 
 ### matches
 
-`matches(AST | AST[], options = {}): boolean | Promise<boolean>`
+**`matches(AST | AST[], options = {}): boolean | Promise<boolean>`**
 
-**Note:** `matches` runs synchronously BY DEFAULT unless `sync:false` is passed as an option.
+Not to be confused with the matches validator:
+
+```js
+import { ast } from '@zuze/schema';
+const { matches } = ast;
+```
+
+`matches` runs synchronously BY DEFAULT unless `sync:false` is passed as an option.
+It is equivalent to running [isValidSync](schemas.md#isValidSync) on a SchemaDefinition
+
+`matches` accepts [AST](#ast) or an array of [ASTs](#ast) and returns true (or a Promise resolving to true) if **any** of the [ASTs](#ast) are valid. If you pass `{how:'every'}` as an option then it will only return true if all of the [ASTs](#ast) are valid.
+
+```js
+const defs = [
+    { schema:'string', tests:[['min',15]] },
+    { schema:'string', tests:['email'] }
+]
+
+matches(defs, 'at least 15 chars'); // true
+matches(defs, 'me@you.com'); // true
+matches(defs, 'me@you.com', {how:'every'}); // false
+matches(defs, 'me@muchlongeraddress.com', {how:'every'}); // true
+```
 
 ### createSchema
 
-`createSchema(AST, options = {}): Schema`
+**`createSchema(AST, options = {}): Schema`**
+
+Converts an [AST](#ast) to a SchemaDefinition that can be passed to one of the functional methods like [cast](schemas.md#cast), [validate](schemas.md#validate)/[validateSync](schemas.md#validateSync), [isValid](schemas.md#isValid)/[isValidSync](schemas.md#isValidSync), [validateAt](schemas.md#validateAt)/[validateAtSync](schemas.md#validateSync)
+
+```js
+createSchema({schema:'string'}); // equivalent to string()
+```
 
 ### createSchemas
 
-`createSchemas(AST[], options = {}): Schema[]`
+**`createSchemas(AST | AST[], options = {}): Schema[]`**
 
-## Types
-
-### AST
+Same as [createSchema](#createschema) except it returns an array of SchemaDefinitions and can accept a single [AST](#ast) or an array
 
 ```js
-{
-    schema: 'mixed' | 'string' | 'number' | 'boolean' | 'date' | 'object' | 'array';
-    default: any;
-    tests: ASTFn[];
-    transforms: ASTFn[];
-    conditions: ASTCondition[];
-    meta: any;
-    label: string;
-    shape: ObjectAST;
-    of: AST;
-    nullable: boolean;
-    typeError: string;
-}
-```
-### ASTFn
-
-```js
-
-string | [string, ...any]
-
-```
-### ASTCondition
-
-```js
-{
-    when: ObjectAST | ObjectAST[];
-    then?: Partial<AST>;
-    otherwise: Partial<AST>
-}
-```
-
-### ObjectAST
-
-```js
-{
-    [fieldName: string]: AST | AST[]
-}
+createSchema([{schema:'string'},{schema:'number'}]);
+// returns eqivalent of [ string(), number() ]
 ```

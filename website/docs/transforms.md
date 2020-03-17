@@ -631,11 +631,3 @@ cast(schema,value);
 ```
 
 </AstFn>
-
-## Types
-
-### TransformFn
-
-```js
-(value: any, originalValue: any ,{schema,options}) => value: any
-```

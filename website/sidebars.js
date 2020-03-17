@@ -4,8 +4,8 @@ module.exports = {
       'getting-started',
       'creating-schemas',
       'validating',
-      // 'creating-validators-transforms',
       'conditions',
+      'extending',
     ],
     Guides: [
       // 'formik',
@@ -14,6 +14,13 @@ module.exports = {
       // 'expressjs',
       // 'logical-operations',
     ],
-    API: ['schemas', 'transforms', 'validators', 'utilities', 'ast'],
+    API: [
+      'schemas',
+      'transforms',
+      'validators',
+      'utilities',
+      'ast',
+      'type-reference',
+    ],
   },
 };

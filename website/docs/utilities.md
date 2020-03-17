@@ -122,6 +122,31 @@ string(tests(required(),min(10)))
 
 </AstFn>
 
+## test
+
+**`(name: string,TestFn: (value,{schema,options}) => boolean | ValidationError | Promise<boolean | ValidationError>)`**
+
+Functional way to create a validator
+
+```js
+const isJim = test('isJim',value => value === 'jim');
+
+const async = test('asyncValidator',async value => {
+    try {
+        await doSomething(value);
+        return true;
+    } catch(err) {
+        return false;
+    }
+});
+
+mixed(tests(isJim,async));
+
+// create a validator that accepts an argument
+const isThing = (arg) => test('isThing',value => value === arg);
+mixed(tests(isThing('one')));
+```
+
 ## transforms
 
 **`transforms(...TransformFn[])`**
@@ -170,6 +195,83 @@ string(conditions(when('fieldA',{
     then: tests(min(10)),
     otherwise: tests(min(20))
 })))
+```
+
+</AstFn>
+
+## when/condition
+
+`when` is an alias of the `condition`
+
+<AstFn>
+
+```js
+const schema = {
+    schema:'string',
+    conditions: [
+        {
+            when: {
+                dep1: { tests:['required', ['is','jim']] },
+                dep2: { schema: 'number', tests: [['min',10],['max',20]]}
+            },
+            then:{
+                schema: 'string',
+                tests: ['required']
+            },
+            otherwise:{
+                schema: 'number',
+                tests: [['min',10]]
+            }
+        }
+    ]
+}
+```
+
+```js
+const first = when(
+    ['dep1','dep2'],
+    (dep1,dep2,schema) => nextSchema)
+);
+
+const second = when(
+    ['dep1','dep2'],
+    {
+        is: (dep1,dep2) => boolean,
+        then: Schema | Partial<Schema> | (schema: Schema) => nextSchema,
+        otherwise: Schema | Partial<Schema> | (schema: Schema) => nextSchema
+    }
+);
+```
+
+</AstFn>
+
+## ref
+
+Create a [reference](conditions.md#refs) to another field or [context](conditions.md#context)
+
+<AstFn>
+
+```js
+const schema = {
+    schema: 'object',
+    shape: {
+        fieldA: {
+            schema: 'string',
+            tests: [['oneOf',[{ref:'fieldA'},ref:{'$context.field'}]]]
+        }
+    }
+}
+```
+
+```js
+const schema = object({
+    fieldA: string(tests(
+        oneOf([
+            ref('fieldA'),
+            ref('$context.field')
+        ])
+    ))
+})
 ```
 
 </AstFn>
@@ -258,60 +360,8 @@ const schema = string(tests(min(10),max(20)));
 const withoutValidations = withoutAny('test',schema);
 ```
 
-## when/condition
+## warnings
 
-`when` is an alias of the `condition`
+**`warnings(shouldWarn: boolean = false)`**
 
-```js
-const first = when(['dep1','dep2'],(dep1,dep2,schema) => nextSchema);
-const second = when(['dep1','dep2'],{
-    is: (dep1,dep2) => boolean,
-    then: Schema | Partial<Schema> | (schema: Schema) => nextSchema,
-    otherwise: Schema | Partial<Schema> | (schema: Schema) => nextSchema
-});
-
-// AST-style
-const third = condition({
-    when: {
-        dep1: { tests:['required', ['is','jim']] },
-        dep2: { schema: 'number', tests: [['min',10],['max',20]]}
-    },
-    then:{
-        schema: 'string',
-        tests: ['required']
-    },
-    otherwise:{
-        schema: 'number',
-        tests: [['min',10]]
-    }
-});
-
-// usage:
-const schema = string(conditions(first,second,third))
-```
-
-## test
-
-**`(name: string,TestFn: (value,{schema,options}) => boolean | ValidationError | Promise<boolean | ValidationError>)`**
-
-Functional way to create a validator
-
-```js
-const isJim = test('isJim',value => value === 'jim');
-
-const async = test('asyncValidator',async value => {
-    try {
-        await doSomething(value);
-        return true;
-    } catch(err) {
-        return false;
-    }
-});
-
-mixed(tests(isJim,async));
-
-// create a validator that accepts an argument
-const isThing = (arg) => test('isThing',value => value === arg);
-mixed(tests(isThing('one')));
-
-```
+There are certain warnings that occur in **@zuze/schema** that you may want to suppress in a production environment. Warnings are enabled by default and can be turned off by calling `warnings(false)`.

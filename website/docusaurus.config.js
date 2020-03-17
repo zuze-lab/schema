@@ -7,6 +7,7 @@ module.exports = {
   organizationName: 'zuze-lab', // Usually your GitHub org/user name.
   projectName: 'schema', // Usually your repo name.
   themeConfig: {
+    sidebarCollapsible: false,
     navbar: {
       title: '@zuze/schema',
       // logo: {
@@ -26,11 +27,32 @@ module.exports = {
       style: 'dark',
       links: [
         {
+          title: 'Other zuze projects',
+          items: [
+            {
+              label: 'interpolate',
+              to: 'https://github.com/zuze-lab/interpolate',
+            },
+            {
+              label: 'd-queue',
+              to: 'https://github.com/zuze-lab/d-queue',
+            },
+            // {
+            //   label: 'modifiable',
+            //   to: 'https://github.com/zuze-lab/modifiable',
+            // },
+          ],
+        },
+        {
           title: 'Docs',
           items: [
             {
               label: 'Getting Started',
               to: 'docs/getting-started',
+            },
+            {
+              label: 'Validating',
+              to: 'docs/validating',
             },
             // {
             //   label: 'Examples',
