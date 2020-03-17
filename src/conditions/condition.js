@@ -1,6 +1,5 @@
 import { extend } from '../schema';
 import { isSchema } from '../utils';
-import { matches, createSchema } from '../ast';
 
 // condition configuration:
 // 1 (internal) { resolve: function(...dependency values,schema) => schema, refs: [...paths] }
@@ -17,52 +16,10 @@ const resolveBranch = (original, branch) =>
     : // function
     typeof branch === 'function'
     ? branch(original)
-    : // ast
-    typeof branch.schema !== 'undefined'
-    ? createSchema(branch)
-    : // schema definitions
-      extend(
-        original,
-        typeof branch.tests !== 'undefined'
-          ? createSchema({ schema: original.type, ...branch })
-          : branch
-      );
-
-const createWhenCondition = ({ when, how = 'some', then, otherwise }) => {
-  const whens = Array.isArray(when) ? when : [when];
-
-  // object schema validator version
-  const keys = whens.reduce(
-    (acc, schema) => [...acc, ...Object.keys(schema)],
-    []
-  );
-
-  return {
-    withOpts: true,
-    resolve: (...next) => {
-      const { schema, options } = next.pop();
-      return resolveBranch(
-        schema,
-        whens[how](w =>
-          Object.entries(w).every(([field, ast]) =>
-            matches(ast, next[keys.findIndex(f => f === field)], {
-              ...options,
-              sync: true,
-            })
-          )
-        )
-          ? then
-          : otherwise
-      );
-    },
-    refs: keys,
-  };
-};
+    : // partial definition
+      extend(original, branch);
 
 export const condition = (...args) => {
-  // single argument with "when"
-  if (args[0].when) return createWhenCondition(...args);
-
   if (args.length < 2)
     throw new Error(
       `Malformed condition. You must supply a reference or list of references followed by an is-then-otherwise condition descriptor or resolver function`

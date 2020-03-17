@@ -70,10 +70,10 @@ export const restrict = (types, name, allowUndef = false) => (
 
 export const tests = (...tests) => ({ test: tests.map(isValidator) });
 
-export function ValidationError(error, { locales, value, path, type }) {
+export function ValidationError(error, { messages, value, path, type }) {
   const errors = Array.isArray(error) ? error : [error];
 
-  const withMessages = errors.map(e => messageForError(e, { locales }));
+  const withMessages = errors.map(e => messageForError(e, { messages }));
   this.name = 'ValidationError';
   this.value = errors.length === 1 ? errors[0].value : value;
   this.path = errors.length === 1 ? errors[0].path : path;

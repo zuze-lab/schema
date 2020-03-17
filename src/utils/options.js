@@ -1,5 +1,5 @@
 import { makeFrom, makePath } from './utils';
-import locales from './locales';
+import messages from './messages';
 
 export const extendOptions = (schema, value, key, options) => ({
   ...options,
@@ -16,7 +16,7 @@ export const defaults = (opts = {}, schema, value, path) => ({
   context: {},
   strict: false,
   assert: true,
-  locales: opts.locales || locales(),
+  messages: messages(opts.messages || {}),
   ...opts,
   from: schema ? [{ schema, value, path }, ...(opts.from || [])] : opts.from,
 });

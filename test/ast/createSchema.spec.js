@@ -19,32 +19,4 @@ describe('createSchema', () => {
       })
     ).toThrow('No transform found for not');
   });
-
-  it('should reject with ast', () => {
-    const schema = {
-      schema: 'array',
-      transforms: [['reject', { tests: [['is', 'jim']] }]],
-    };
-
-    expect(cast(createSchema(schema), [1, 'jim', 2, 'fred'])).toEqual([
-      1,
-      2,
-      'fred',
-    ]);
-  });
-
-  it('should unique with ast', () => {
-    const schema = {
-      schema: 'array',
-      transforms: [['unique', 'id']],
-    };
-
-    const subject = [
-      { id: 1, a: 'b' },
-      { id: 1, a: 'c' },
-      { id: 2, a: 'd' },
-    ];
-
-    expect(cast(createSchema(schema), subject)).toHaveLength(2);
-  });
 });

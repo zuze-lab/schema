@@ -24,10 +24,12 @@ const defaultMessages = {
       values.length === 1 ? values[0] : `one of ${values.join(', ')}`
     }`,
   'string.max': '${label} must not be longer than ${max} characters',
+  'string.between': '${label} must be between ${low} and ${high} characters',
   'date.max': ({ label, max }) =>
     `${label} must not be after ${max.getTime ? max.toISOString() : max}`,
   'number.max': '${label} must be no more than ${max}',
   'array.max': '${label} must have no more than ${max} items',
+  'array.between': '${label} must have between ${low} and ${high} items',
   'string.min': '${label} must not be shorter than ${min} characters',
   'date.min': ({ label, min }) =>
     `${label} must be after ${min.getTime ? min.toISOString() : min}`,
@@ -41,12 +43,12 @@ export default map => ({
   ...(map || {}),
 });
 
-export const messageForError = (error, { locales }) => {
+export const messageForError = (error, { messages }) => {
   const message =
     error.message ||
-    locales[`${error.schema}.${error.type}`] ||
-    locales[`${error.type}`] ||
-    locales['default'];
+    messages[`${error.schema}.${error.type}`] ||
+    messages[`${error.type}`] ||
+    messages['default'];
   return {
     ...error,
     message:

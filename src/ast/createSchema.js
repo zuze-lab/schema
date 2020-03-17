@@ -5,11 +5,11 @@ import date from '../date';
 import array from '../array';
 import string from '../string';
 import mixed from '../mixed';
-import { condition } from '../conditions';
 import { createValidators } from './createValidators';
 import { createTransforms } from './createTransforms';
 import * as astTransforms from './transforms';
 import * as astValidators from './validators';
+import { createConditions } from './createConditions';
 
 const schemas = { object, number, boolean, date, array, string, mixed };
 
@@ -62,7 +62,7 @@ export const createSchema = (
       label: label,
       nullable,
       typeError,
-      condition: conditions ? conditions.map(condition) : undefined,
+      condition: createConditions(conditions),
       shape: shape
         ? Object.entries(shape).reduce(
             (acc, [field, schema]) => ({

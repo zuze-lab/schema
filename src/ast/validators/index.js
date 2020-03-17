@@ -2,3 +2,4 @@
 export { default as negate } from './negate';
 export { default as oneOfType } from './oneOfType';
 export { default as serial } from './serial';
+export { default as combine } from './combine';
