@@ -1,7 +1,6 @@
 # @zuze/schema
 
 [![npm version](https://img.shields.io/npm/v/@zuze/schema.svg)](https://npmjs.org/package/@zuze/schema)
- 
 [![Coverage Status](https://coveralls.io/repos/github/zuze-lab/schema/badge.svg)](https://coveralls.io/github/zuze-lab/schema)
 [![Build Status](https://travis-ci.com/zuze-lab/schema.svg)](https://travis-ci.com/zuze-lab/schema)
 [![Bundle Phobia](https://badgen.net/bundlephobia/minzip/@zuze/schema)](https://bundlephobia.com/result?p=@zuze/schema)
