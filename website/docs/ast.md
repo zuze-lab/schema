@@ -33,7 +33,7 @@ array(
 
 ### Conditions
 
-Using the AST API conditions is an array of [ASTCondition](#astcondition) objects:
+Using the AST API conditions is an array of [ASTCondition](typeref.md#astcondition) objects:
 
 ```js
 // ConditionObject
@@ -44,7 +44,7 @@ otherwise?: Partial<AST>
 
 ```
 
-When `when` is an array, if ANY of the [`ObjectAST's`](#objectast) are matched (using [matches](#matches)), the `then` will be applied (if present). If not, the `otherwise` will be applied (if present).
+When `when` is an array, if ANY of the [`ObjectAST's`](typeref.md#objectast) are matched (using [matches](#matches)), the `then` will be applied (if present). If not, the `otherwise` will be applied (if present).
 
 ```js
 const schema = {
@@ -69,7 +69,7 @@ const schema = {
 
 ### Refs
 
-Refs are created in AST via [ASTRef](#astref)
+Refs are created in AST via [ASTRef](typeref.md#astref)
 
 ```js
 const schema = {
@@ -132,7 +132,7 @@ cast(createSchema(schema,subject)); // [ {id:1,a:'a'}, {id:2,a:'b'} ]
 
 ### compact
 
-[compact](transforms.md) accepts a rejector function in the functional form. In the AST form it accepts an argument that will be passed to [matches](#matches). Any value in the array that passes `matches` will be excluded.
+[compact](transforms.md#compact) accepts a rejector function in the functional form. In the AST form it accepts an argument that will be passed to [matches](#matches). Any value in the array that passes `matches` will be excluded.
 
 ```js
 const schema = {
@@ -202,7 +202,7 @@ const { matches } = ast;
 `matches` runs synchronously BY DEFAULT unless `sync:false` is passed as an option.
 It is equivalent to running [isValidSync](schemas.md#isValidSync) on a SchemaDefinition
 
-`matches` accepts [AST](#ast) or an array of [ASTs](#ast) and returns true (or a Promise resolving to true) if **any** of the [ASTs](#ast) are valid. If you pass `{how:'every'}` as an option then it will only return true if all of the [ASTs](#ast) are valid.
+`matches` accepts [AST](typeref.md#ast) or an array of [ASTs](typeref.md#ast) and returns true (or a Promise resolving to true) if **any** of the [ASTs](typeref.md#ast) are valid. If you pass `{how:'every'}` as an option then it will only return true if all of the [ASTs](typeref.md#ast) are valid.
 
 ```js
 const defs = [
@@ -220,7 +220,7 @@ matches(defs, 'me@muchlongeraddress.com', {how:'every'}); // true
 
 **`createSchema(AST, options = {}): Schema`**
 
-Converts an [AST](#ast) to a SchemaDefinition that can be passed to one of the functional methods like [cast](schemas.md#cast), [validate](schemas.md#validate)/[validateSync](schemas.md#validateSync), [isValid](schemas.md#isValid)/[isValidSync](schemas.md#isValidSync), [validateAt](schemas.md#validateAt)/[validateAtSync](schemas.md#validateSync)
+Converts an [AST](typeref.md#ast) to a SchemaDefinition that can be passed to one of the functional methods like [cast](schemas.md#cast), [validate](schemas.md#validate)/[validateSync](schemas.md#validateSync), [isValid](schemas.md#isValid)/[isValidSync](schemas.md#isValidSync), [validateAt](schemas.md#validateAt)/[validateAtSync](schemas.md#validateSync)
 
 ```js
 createSchema({schema:'string'}); // equivalent to string()
@@ -230,7 +230,7 @@ createSchema({schema:'string'}); // equivalent to string()
 
 **`createSchemas(AST | AST[], options = {}): Schema[]`**
 
-Same as [createSchema](#createschema) except it returns an array of SchemaDefinitions and can accept a single [AST](#ast) or an array
+Same as [createSchema](#createschema) except it returns an array of SchemaDefinitions and can accept a single [AST](typeref.md#ast) or an array
 
 ```js
 createSchema([{schema:'string'},{schema:'number'}]);

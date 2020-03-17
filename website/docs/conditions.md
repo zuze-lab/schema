@@ -6,7 +6,7 @@ sidebar_label: Conditions
 
 import { AstFn, ZuzeTabs } from '../src/examples/tabs';
 
-Conditions are arguably the most powerful part of **@zuze/schema**. Some methods to handle conditional validations is present in virtually all schemas, but **@zuze/schema** aims to to boil complicated conditional logic when it comes to schema validation down to a very simple and intuitive API (especially via the [AST](ast.md#ASTCondition))
+Conditions are arguably the most powerful part of **@zuze/schema**. Some methods to handle conditional validations is present in virtually all schemas, but **@zuze/schema** aims to to boil complicated conditional logic when it comes to schema validation down to a very simple and intuitive API (especially via the [AST](typeref.md#ast))
 
 Schemas can be conditional based on two properties, 
 

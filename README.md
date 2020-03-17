@@ -1,10 +1,14 @@
 # @zuze/schema
 
-<!--
 [![npm version](https://img.shields.io/npm/v/@zuze/schema.svg)](https://npmjs.org/package/@zuze/schema)
---> 
+ 
 [![Coverage Status](https://coveralls.io/repos/github/zuze-lab/schema/badge.svg)](https://coveralls.io/github/zuze-lab/schema)
 [![Build Status](https://travis-ci.com/zuze-lab/schema.svg)](https://travis-ci.com/zuze-lab/schema)
+[![Bundle Phobia](https://badgen.net/bundlephobia/minzip/@zuze/schema)](https://bundlephobia.com/result?p=@zuze/schema)
+
+## Official Docs
+
+[GitHub Pages Documentation](https://zuze-lab.github.io/schema/)
 
 ## What is this?
 
@@ -12,11 +16,13 @@ It's a schema validator (like [yup](https://github.com/jquense/yup) or [joi](htt
 
 ## So why should I use this one?
 
-The philosophy behind @zuze/schema is to:
+The philosophy behind **@zuze/schema** is to:
 
-1. Be **functional/composable** (i.e. tree-shakable, only include the validators/transforms/schemas you actually need)
+1. Be **functional/composable**
 
 2. Be **configurable** (the exact opposite of 1) - via the [AST API](https://en.wikipedia.org/wiki/Abstract_syntax_tree) - to create schema definitions that can be stored once and run ANYWEHRE.
+
+3. Be **fun** - check out how cool our [conditions](https://zuze-lab.github.io/schema/docs/ast#conditions) are!
 
 @zuze/schema doesn't claim to be better (it's not) or faster (it's not) than any of the other schema validation projects, but it does aim to have a more fun API (whether you like to write functional code or appreciate some fine YML-like configuration via the AST API)!
 
@@ -40,75 +46,6 @@ npm install @zuze/schema
 yarn install @zuze/schema
 ```
 
-## Conditional Schemas
+## Further
 
-Preferred way of creating conditions is by using the AST form of an @zuze/schema
-
-```js
-{
-    condition({
-        when:{
-            fieldA: { tests: [ 'required', [ 'min', 5 ] ] },
-            fieldB: { tests: [ 'required', [ 'min', 5 ] ] }
-        },
-        then: { schema: 'string', tests: [ 'required', [ 'matches', /joe/ ] ] },
-        otherwise: { schema: 'number', tests: [ 'required', [ 'between', 10, 20 ] ] }
-    })
-}
-```
-
-But you can also do it like [yup](https://github.com/jquense/yup#mixedwhenkeys-string--arraystring-builder-object--value-schema-schema-schema) or [joi](https://hapi.dev/family/joi/api/?v=17.1.0#alternativesconditionalcondition-options):
-
-```js
-condition([ 'fieldA', 'fieldB' ],{
-    is: 'someVal',
-    then?: schema or (schema) => nextSchema
-    otherwise?: schema or (schema) => nextSchema
-})
-
-// or 
-
-condition([ 'fieldA', 'fieldB' ], (fieldA, fieldB, originalSchema) => nextSchema)
-```
-
-## AST
-
-The declarative nature of a schema makes ASTs pretty straightforward to generate.
-
-While @zuze/schema is a "functional" library, the power of it really lies in it's AST transformer.
-
-Declare a schema as JSON and then transform it into a zuze schema:
-
-```js
-{
-    schema: 'object' | 'array' | 'string' | 'mixed' | 'date' | 'boolean' | 'number',
-    default: 'some value',
-    label: 'some label',
-    tests:[
-        'required', // the name of a validator
-        [ 'max', 10 ], // if an array, the first entry is the name of a validator and all others are passed as arguments to the validator
-        [ 'is', { ref: '$field' } ], // works with refs
-        [ 'oneOf', [ '1', '2', { ref: '$field.path' } ] ], // and nested refs
-    ],
-    conditions:[
-        when: {
-            fieldA: { tests: [ 'required' ] },
-            fieldB: { tests: [ [ 'oneOf', [ 'jim', 'joe', 'bill' ] ] ] }
-        },
-        then?: AST | Partial<AST>
-        otherwise?: AST | Partial<AST>
-    ]
-
-    // when schema is 'array' it can accept "of"
-    of: {
-        schema: 'string',
-        tests: [...]
-    },
-
-    // when schema is 'object', it can accept "shape":
-    shape: {
-        fieldA: { schema: 'string' },
-        fieldB: { schema: 'mixed' },
-    }
-}
-```
+It's all here https://zuze-lab.github.io/schema/!
