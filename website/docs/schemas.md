@@ -276,8 +276,8 @@ object({
     firstName: string(tests(required(), min(5))),
     lastName: string(tests(required(), min(5))),
     address: object({
-        address1: string(required(), max(60)),
-        province: string(required(), oneOf(['BC','NL'])),
+        address1: string(tests(required(), max(60))),
+        province: string(tests(required(), oneOf(['BC','NL']))),
         postalCode: string(
             transforms(strip()),
             tests(required(), matches(/^[A-Z]\d[A-Z]\d[A-Z]\d$/i)),
