@@ -88,7 +88,7 @@ const schema = {
 
 By default, all transforms/validators available in **@zuze/schema** are available via the AST. But part of the beauty of **@zuze/schema** is being able to [create your own transforms/validators](extending.md). 
 
-When using the AST, each custom transform/validator must be a function (called with the `options` passed to [`createSchema(s)`](#createSchemas)/[`matches`](#matches) that returns a function called with the arguments in the AST.
+When using the AST, each custom transform/validator must be a function (called with the [options](typeref.md#astschemaoptions) passed to [`createSchema(s)`](#createSchemas)/[`matches`](#matches) that returns a function called with the arguments in the AST.
 
 ```js
 // validator
@@ -190,7 +190,7 @@ const schema = {
 
 ### matches
 
-**`matches(AST | AST[], options = {}): boolean | Promise<boolean>`**
+**`matches(AST | AST[], options?: ASTMatchesOptions): boolean | Promise<boolean>`**
 
 Not to be confused with the matches validator:
 
@@ -202,7 +202,7 @@ const { matches } = ast;
 `matches` runs synchronously BY DEFAULT unless `sync:false` is passed as an option.
 It is equivalent to running [isValidSync](schemas.md#isValidSync) on a SchemaDefinition
 
-`matches` accepts [AST](typeref.md#ast) or an array of [ASTs](typeref.md#ast) and returns true (or a Promise resolving to true) if **any** of the [ASTs](typeref.md#ast) are valid. If you pass `{how:'every'}` as an option then it will only return true if all of the [ASTs](typeref.md#ast) are valid.
+`matches` accepts [AST](typeref.md#ast) or an array of [ASTs](typeref.md#ast) and returns true (or a Promise resolving to true) if **any** of the [ASTs](typeref.md#ast) are valid. If you pass `{how:'all'}` (see [ASTMatchesOptions](typeref.md#astmatchesoptions)) as an option then it will only return true if all of the [ASTs](typeref.md#ast) are valid.
 
 ```js
 const defs = [
@@ -218,7 +218,7 @@ matches(defs, 'me@muchlongeraddress.com', {how:'every'}); // true
 
 ### createSchema
 
-**`createSchema(AST, options = {}): Schema`**
+**`createSchema(schema: AST, options?: ASTSchemaOptions): Schema`**
 
 Converts an [AST](typeref.md#ast) to a SchemaDefinition that can be passed to one of the functional methods like [cast](schemas.md#cast), [validate](schemas.md#validate)/[validateSync](schemas.md#validateSync), [isValid](schemas.md#isValid)/[isValidSync](schemas.md#isValidSync), [validateAt](schemas.md#validateAt)/[validateAtSync](schemas.md#validateSync)
 
@@ -228,7 +228,7 @@ createSchema({schema:'string'}); // equivalent to string()
 
 ### createSchemas
 
-**`createSchemas(AST | AST[], options = {}): Schema[]`**
+**`createSchemas(schemas: AST | AST[], options?: ASTSchemaOptions): Schema[]`**
 
 Same as [createSchema](#createschema) except it returns an array of SchemaDefinitions and can accept a single [AST](typeref.md#ast) or an array
 

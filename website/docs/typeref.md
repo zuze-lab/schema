@@ -150,3 +150,41 @@ string | [string, ...args: any[]]
     ref: string
 }
 ```
+
+## ASTMatchesOptions
+```js
+{
+    how?: 'all',
+    // returns boolean | Promise<boolean> only when all provided schemas are true
+    // default is undefined
+    ...ASTSchemaOptions
+}
+```
+
+## ASTSchemaOptions
+
+```js
+{
+    validators?: {
+        [key: string]: ASTCustomValidator,
+        ...
+    },
+    transforms?: {
+        [key: string]: ASTCustomTransform,
+        ...
+    },
+    ...ValidationOptions
+}
+```
+
+## ASTCustomValidator
+
+```js
+(options: ASTSchemaOptions) => (...args: any[]) => ValidatorDefinition 
+```
+
+### ASTCustomTransform
+
+```js
+(options: ASTSchemaOptions) => (...args: any[]) => TransformFn;
+```
