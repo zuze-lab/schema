@@ -151,7 +151,7 @@ string | [string, ...args: any[]]
 }
 ```
 
-## ASTMatchesOptions
+### ASTMatchesOptions
 ```js
 {
     how?: 'all',
@@ -161,7 +161,7 @@ string | [string, ...args: any[]]
 }
 ```
 
-## ASTSchemaOptions
+### ASTSchemaOptions
 
 ```js
 {
@@ -177,7 +177,7 @@ string | [string, ...args: any[]]
 }
 ```
 
-## ASTCustomValidator
+### ASTCustomValidator
 
 ```js
 (options: ASTSchemaOptions) => (...args: any[]) => ValidatorDefinition 
