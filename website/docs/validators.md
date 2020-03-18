@@ -20,7 +20,7 @@ All validators accept as their final argument the same set of options (optional)
 
 ### name
 
-By default, `name` is the `name` of the validator you are calling - i.e. the name for the `oneOf` validator is `oneOf`.
+By default, `name` is the `name` of the validator you are calling - i.e. the name for the [oneOf](#oneOf) validator is `oneOf`.
 
 ### params
 
@@ -53,6 +53,8 @@ getErrorsSync(schema,'jim'); // The value of first name should include fred
 ## Validators
 
 Validators aren't always applicable to all schemas ([min](#min) is not relevant for a [boolean schema](schemas.md#boolean), for instance) This is accomplished via a pre-validation hook which verifies that the current [ValidatorDefinition](#validatordefinition) is applicable to the current schema.
+
+**Note:** `undefined` is considered a valid value for all validators except [required](#required).
 
 ### required
 
@@ -168,14 +170,15 @@ isValidSync(schema, { fieldB: 'jim' }); // true
 </AstFn>
 
 
-
 ### oneOf
 
-**`oneOf(value: Array<any | Ref>, options: ValidatorOptions)`**
+**`oneOf(value: Ref | Array<any | Ref>, options: ValidatorOptions)`**
 
 Applicable to schemas: **ALL**
 
-Value being validated must be one of the values given to `oneOf`
+Value being validated must be one of the values given to `oneOf` OR if `value` is a [ref](typeref.md#astRef) then the value being validated must be one of the values in the reference.
+
+**Note:** Just a reminder that `undefined` is considered a valid value. If you need to test for `undefined` use [required](#required).
 
 <AstFn>
 
@@ -184,7 +187,10 @@ const schema = {
     schema:'object',
     shape: {
         fieldB: {
-            tests: [['oneOf', ['a', 9, { ref: 'fieldA' }]]
+            tests: [['oneOf', ['a', 9, { ref: 'fieldA' }]]]
+        },
+        fieldC: {
+            tests: [['oneOf', { ref: 'fieldD' }]]
         }
     }
 };
@@ -192,6 +198,8 @@ const schema = {
 matches(schema, { fieldA: 'jim', fieldB: 'jim'}); // true
 matches(schema, { fieldA: 'fred', fieldB: 'a'}); // true
 matches(schema, { fieldB: 'jim'}); // false
+matches(schema, { fieldC: 'jim', fieldD: ['joe','fred' ]}); // false
+matches(schema, { fieldC: 'joe', fieldD: ['joe','fred' ]}); // true
 ```
 
 ```js

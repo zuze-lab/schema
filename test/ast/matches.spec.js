@@ -135,53 +135,24 @@ describe('ast - matches', () => {
     expect(matches(schema, [4])).toBe(false);
     expect(matches(schema, [5, 7])).toBe(true);
   });
+
+  it('should obey oneOf with a ref', () => {
+    const schema = {
+      schema: 'object',
+      shape: {
+        fieldB: {
+          tests: [['oneOf', ['a', 9, { ref: 'fieldA' }]]],
+        },
+        fieldC: {
+          tests: [['oneOf', { ref: 'fieldD' }]],
+        },
+      },
+    };
+
+    matches(schema, { fieldA: 'jim', fieldB: 'jim' }); // true
+    matches(schema, { fieldA: 'fred', fieldB: 'a' }); // true
+    matches(schema, { fieldB: 'jim' }); // false
+    matches(schema, { fieldC: 'jim', fieldD: ['joe', 'fred'] }); // false
+    matches(schema, { fieldC: 'joe', fieldD: ['joe', 'fred'] }); // true
+  });
 });
-
-/*
-
-```js
-{
-    schema: 'object' | 'array' | 'string' | 'mixed' | 'date' | 'boolean' | 'number',
-    default: 'some value',
-    label: 'some label',
-    tests:[
-        'required', // the name of a validator
-        ['max',10] // if an array, the first entry is the name of a validator and all others are passed as arguments to the validator
-        ['is',{ref:'$field'}] // works with refs
-        ['oneOf',['1','2',{ref:'$field.path'}]], // and nested refs
-    ],
-    conditions:[
-        when: [{
-            fieldA: {ast}
-            fieldB: {ast}
-        }],
-        when: ['fieldA','fieldB']
-        matches: [
-            [
-                {tests:['required']},
-                {tests:[['oneOf',['jim','joe','bill']]]}
-            ],
-            {
-                tests:['required']
-            }
-        ],
-        how:'some',
-        then: AST
-        otherwise: AST
-    ]
-
-    // when schema is 'array' it can accept "of"
-    of: {
-        schema: 'string',
-        tests: [...]
-    },
-
-    // when schema is 'object', it can accept "shape":
-    shape: {
-        fieldA: { schema: 'string' },
-        fieldB: { schema: 'mixed' },
-    }
-}
-```
-
-*/

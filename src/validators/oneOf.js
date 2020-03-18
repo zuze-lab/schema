@@ -1,11 +1,21 @@
 import cast from '../cast';
-const test = values => (value, { resolve, schema }) =>
-  values.map(v => resolve(v)).includes(cast(schema, value));
+import { isRef } from '../ref';
+import { test } from './utils';
+const oneOf = values => (value, { resolve, schema, createError }) => {
+  const resolved = (isRef(values) ? resolve(values) || [] : values).map(v =>
+    resolve(v)
+  );
 
-export default (values, { message, params = {}, name = 'oneOf' } = {}) => ({
-  name,
-  test: test(values),
-  params: { values, ...params },
-  exclusive: true,
-  message,
-});
+  return (
+    !resolved.length ||
+    resolved.includes(cast(schema, value)) ||
+    createError({ params: { values: resolved } })
+  );
+};
+
+export default (values, { params = {}, name = 'oneOf', ...rest } = {}) =>
+  test(name, oneOf(values), {
+    exclusive: true,
+    params: { values, ...params },
+    ...rest,
+  });
