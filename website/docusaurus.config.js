@@ -8,6 +8,10 @@ module.exports = {
   projectName: 'schema', // Usually your repo name.
   themeConfig: {
     sidebarCollapsible: false,
+    algolia: {
+      apiKey: 'd1cff25eb35f7f1c8ab03d6c87b91fb5',
+      indexName: 'zuze-lab_schema',
+    },
     navbar: {
       title: '@zuze/schema',
       // logo: {
@@ -36,6 +40,10 @@ module.exports = {
             {
               label: 'd-queue',
               to: 'https://github.com/zuze-lab/d-queue',
+            },
+            {
+              label: 'modifiable',
+              to: 'https://github.com/zuze-lab/modifiable',
             },
             // {
             //   label: 'modifiable',
