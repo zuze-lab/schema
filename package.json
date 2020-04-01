@@ -17,7 +17,7 @@
     "yup",
     "joi"
   ],
-  "homepage": "https://github.com/zuze-lab/schema",
+  "homepage": "https://zuze-lab.github.io/schema",
   "scripts": {
     "prepublishOnly": "yarn test && yarn build",
     "build": "rimraf build && rollup -c",
