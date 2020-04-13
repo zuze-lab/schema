@@ -1065,6 +1065,11 @@
     lodash.unescape "4.0.1"
     semver "5.5.0"
 
+"@zuze/interpolate@^6.1.1":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@zuze/interpolate/-/interpolate-6.1.1.tgz#f7d7ab3f56e9de2fc24f9cf64e2be424537cd63a"
+  integrity sha512-Z5UHpEdJDGV5vGOfm4Lwza0frKueuFeKj9S3CoF3regxmNS537tRehLYlAQtk59kUftAzhCg4a5GcyVnutXVSg==
+
 abab@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.3.tgz#623e2075e02eb2d3f2475e49f99c91846467907a"
@@ -3875,11 +3880,6 @@ prompts@^2.0.1:
   dependencies:
     kleur "^3.0.3"
     sisteransi "^1.0.4"
-
-property-expr@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/property-expr/-/property-expr-1.5.1.tgz#22e8706894a0c8e28d58735804f6ba3a3673314f"
-  integrity sha512-CGuc0VUTGthpJXL36ydB6jnbyOf/rAHFvmVrJlH+Rg0DqqLFQGAP6hIaxD/G0OAmBJPhXDHuEJigrp0e0wFV6g==
 
 property-expr@^2.0.0:
   version "2.0.2"

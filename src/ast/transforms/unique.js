@@ -1,8 +1,8 @@
-import { getter } from 'property-expr';
+import { get } from '@zuze/interpolate';
 const def = (a, b) => b === a;
 
 const createBy = using =>
-  using ? (a, b) => getter(using, true)(a) === getter(using, true)(b) : def;
+  using ? (a, b) => get(a, using) === get(b, using) : def;
 
 export default () => by => value => {
   if (!Array.isArray(value)) return value;

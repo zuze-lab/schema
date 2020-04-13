@@ -1,4 +1,4 @@
-import { getter } from 'property-expr';
+import { get } from '@zuze/interpolate';
 
 export default val => {
   if (typeof val === 'string')
@@ -14,9 +14,7 @@ export default val => {
 export const compact = (rej = v => !!v) => value => value.filter(rej);
 
 const createBy = (by, a, b) =>
-  typeof by === 'function'
-    ? by(a, b)
-    : getter(by, true)(a) === getter(by, true)(b);
+  typeof by === 'function' ? by(a, b) : get(a, by) === get(b, by);
 
 const defaultBy = (a, b) => b === a;
 

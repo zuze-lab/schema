@@ -1,4 +1,4 @@
-import { getter } from 'property-expr';
+import { get } from '@zuze/interpolate';
 import { schema } from './schema';
 import { SchemaType, def } from './utils';
 import cast from './cast';
@@ -21,9 +21,7 @@ const ref = path =>
       // self referencing
       if (path === '.') return DEF(value);
 
-      // context - safe getter if entry doesn't exist
-      if (path[0] === contextPrefix)
-        return DEF(getter(path.slice(1), true)(context));
+      if (path[0] === contextPrefix) return DEF(get(context, path.slice(1)));
 
       if (!from || !from.length) {
         throw new Error(

@@ -1,6 +1,6 @@
 {
   "name": "@zuze/schema",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Composable/extendable validation schema, inspired by yup/joi",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
@@ -29,7 +29,7 @@
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.8.7",
-    "property-expr": "^1.5.1"
+    "@zuze/interpolate": "^6.1.1"
   },
   "optionalDependencies": {
     "date-fns": "^2.9.0"
