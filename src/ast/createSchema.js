@@ -5,6 +5,7 @@ import date from '../date';
 import array from '../array';
 import string from '../string';
 import mixed from '../mixed';
+import ref from '../ref';
 import { createValidators } from './createValidators';
 import { createTransforms } from './createTransforms';
 import * as astTransforms from './transforms';
@@ -58,7 +59,7 @@ export const createSchema = (
   return make(
     schema,
     {
-      default: def,
+      default: def && def.ref ? resolver => resolver(ref(def.ref)) : def,
       label: label,
       nullable,
       typeError,

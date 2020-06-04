@@ -19,4 +19,48 @@ describe('createSchema', () => {
       })
     ).toThrow('No transform found for not');
   });
+
+  it('should create a schema with relative refs', () => {
+    expect(
+      cast(
+        createSchema({
+          schema: 'object',
+          shape: {
+            fielda: {
+              schema: 'object',
+              shape: {
+                field1: {
+                  schema: 'object',
+                  shape: {
+                    field1: { default: 'bill' },
+                    field2: { default: { ref: '.field3.field4' } },
+                  },
+                },
+                field3: {
+                  schema: 'object',
+                  shape: {
+                    field4: { default: { ref: '..field5' } },
+                  },
+                },
+              },
+            },
+            field5: {
+              default: 'joe',
+            },
+          },
+        })
+      )
+    ).toEqual({
+      fielda: {
+        field1: {
+          field1: 'bill',
+          field2: 'joe',
+        },
+        field3: {
+          field4: 'joe',
+        },
+      },
+      field5: 'joe',
+    });
+  });
 });
