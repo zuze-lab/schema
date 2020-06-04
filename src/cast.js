@@ -1,6 +1,7 @@
 import { defaults } from './utils';
 import resolve from './resolve';
 import castInner from './cast.inner';
+import { isRef } from './ref';
 
 const check = (
   value,
@@ -31,6 +32,8 @@ const cast = (schema, value, options) => {
   const fork = resolve(schema, { ...options, value });
   if (fork !== schema) return cast(fork, value, options);
 
+  const resolver = ref => (isRef(ref) ? cast(ref, undefined, options) : ref);
+
   const { strict } = options;
   const { transform, inner, default: def } = schema;
 
@@ -51,7 +54,11 @@ const cast = (schema, value, options) => {
     ? castInner(innerSchema, schema, value, options)
     : value;
 
-  return final !== undefined ? final : typeof def === 'function' ? def() : def;
+  return final !== undefined
+    ? final
+    : typeof def === 'function'
+    ? def(resolver)
+    : def;
 };
 
 export default cast;
