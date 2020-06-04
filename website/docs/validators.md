@@ -554,21 +554,62 @@ Essentially a "real" `abortEarly:true` for async validators.
 <AstFn>
 
 ```js
-const schema = {
-    schema:'string',
-    tests: [['combine',[['min',5],['max',15]]]
+const firstAsync = async val => {
+    // do something async
+    // const result = await someAsyncFunc(val)
+    return val === 'bad';
 }
 
-matches(schema,'at least 5'); // true
-matches(schema,'no'); // false
-matches(schema,'this is way longer than 15'); // false
+const secondAsync = async val => {
+    // do something async
+    // const result = await someAsyncFunc(val)
+    return val === 'good';
+}
+
+
+const schema = createSchema(
+    {
+        schema:'string',
+        tests: [
+            [
+                'serial',
+                [
+                    ['firstAsync',{message:'Failed Async 1'}],
+                    ['secondAsync',{message:'Failed Async 2'}]
+                ]
+            ]
+        ]
+    },
+    // supply custom validators when compiling AST
+    {
+        validators: { firstAsync,secondAsync }
+    }
+);
+
+validate(createSchema(schema),'good'); // Promise<ValidationError> - Failed Async 1
+validate(createSchema(schema),'bad'); // Promise<ValidationError> - Failed Async 2
 ```
 
 ```js
-const schema = string(tests(combine(min(5),max(15))));
-isValidSync(schema,'at least 5'); // true
-isValidSync(schema,'no'); // false
-isValidSync(schema,'this is way longer than 15'); // false
+const firstAsync = async val => {
+    // do something async
+    // const result = await someAsyncFunc(val)
+    return val === 'bad';
+}
+
+const secondAsync = async val => {
+    // do something async
+    // const result = await someAsyncFunc(val)
+    return val === 'good';
+}
+
+const schema = string(tests(
+    test('firstAsync', firstAsync, { message:'Failed Async 1' }),
+    test('secondAsync', secondAsync, { message:'Failed Async 2' }),
+));
+
+validate(schema,'good', { abortEarly: false }); // Promise<ValidationError> - Failed Async 1
+validate(schema,'bad', { abortEarly: false }); // Promise<ValidationError> - Failed Async 2
 ```
 
 </AstFn>
