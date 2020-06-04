@@ -1,4 +1,4 @@
-import { forEach } from 'property-expr';
+import { parts } from '@zuze/interpolate';
 import { combineLazies, defaults } from './utils';
 import { combine } from './conditions';
 import { withoutAny, without } from './without';
@@ -23,25 +23,23 @@ const resolve = (schema, options) =>
 // schemas may need to be resolved during resolve.path
 // if there are conditional shapes, for instance then we can't
 // get subsequent schemas until we resolve the previous ones
-export const resolvePath = (path, schema, value, options, requiresSchema) => {
-  let next = { schema, value };
-  const from = [next, ...(options.from || [])];
-  forEach(path, (part, _, isArray) => {
-    next.path = part;
-    if (value !== undefined) value = value[part];
+export const resolvePath = (path, schema, value, options, requiresSchema) =>
+  parts(path).reduce(
+    ([schema, value, from], part) => {
+      if (value !== undefined) value = value[part];
 
-    const { shape, of } = schema;
-    schema = isArray ? of : shape[part];
-    if (schema) schema = resolve(schema, { ...options, from, value });
+      const { shape, of } = schema;
+      schema = part.match(/^\d+$/) ? of : shape[part];
+      if (schema) schema = resolve(schema, { ...options, from, value });
 
-    if (!schema && requiresSchema)
-      throw new Error(`Cannot resolve schema from ${path} - failed at ${part}`);
+      if (!schema && requiresSchema)
+        throw new Error(
+          `Cannot resolve schema from ${path} - failed at ${part}`
+        );
 
-    next = { schema, value };
-    from.unshift(next);
-  });
-
-  return [schema, value, from];
-};
+      return [schema, value, [{ schema, value }, ...from]];
+    },
+    [schema, value, [{ schema, value }, ...(options.from || [])]]
+  );
 
 export default resolve;
