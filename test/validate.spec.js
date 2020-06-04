@@ -11,7 +11,7 @@ import {
   validateSyncAt,
   isValidSync,
 } from '../src';
-import { tests, defined, min, max, serial, test as t } from '../src/validators';
+import { tests, defined, min, max, test as t } from '../src/validators';
 
 const check = (schema, val, { sync, abortEarly } = {}) =>
   (sync ? validateSync : validate)(schema, val, { sync, abortEarly });
@@ -66,46 +66,6 @@ describe('validate', () => {
 
   it('should throw an error if a non-test is passed to tests', () => {
     expect(() => tests('not a test')).toThrow();
-  });
-
-  it('should run tests serially (sync)', () => {
-    const first = t(
-      'bill',
-      jest.fn(() => false)
-    );
-    const second = t(
-      'fred',
-      jest.fn(() => false)
-    );
-
-    const schema = string(tests(serial(first, second)));
-
-    try {
-      validateSync(schema, 'myval', { abortEarly: false });
-      expect(1).toBe(2);
-    } catch (err) {
-      expect(second.test).not.toHaveBeenCalled();
-    }
-  });
-
-  it('should run tests serially (async)', async () => {
-    const first = t(
-      'bill',
-      jest.fn(() => new Promise(res => setTimeout(() => res(false), 10)))
-    );
-    const second = t(
-      'fred',
-      jest.fn(() => new Promise(res => setTimeout(() => res(false), 10)))
-    );
-
-    const schema = string(tests(serial(first, second)));
-
-    try {
-      await validate(schema, 'myval', { abortEarly: false });
-      expect(1).toBe(2);
-    } catch (err) {
-      expect(second.test).not.toHaveBeenCalled();
-    }
   });
 
   it('should validateAt', () => {
