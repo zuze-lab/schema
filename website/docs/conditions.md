@@ -183,3 +183,76 @@ string(
 ```
 
 </AstFn>
+
+### Relative Refs (!)
+
+Relative refs allow access to ancestors schemas/values from a child schema. They are defined by prefixing with a ref with a `.`. Every `.` in the prefix goes up "one level" of schema.
+
+Casting the below object schema results in the following output:
+
+```
+{
+    fielda: {
+        field1: { 
+            field1: 'bill',
+            field2: 'joe' 
+        },
+        field3: { 
+            field4: 'joe' 
+        }
+    },
+    field5: 'joe'
+}
+```
+
+<AstFn>
+
+```js
+{
+    schema: 'object',
+    shape: {
+        fielda: {
+            schema: 'object',
+            shape: {
+                field1: {
+                    schema: 'object',
+                    shape: {
+                        field1: { default: 'bill' },
+                        field2: { default: { ref: '.field3.field4' } }                        
+                    }
+                },
+                field3: {
+                    schema: 'object',
+                    shape: {
+                        field4: { default: { ref: '..field5' } }
+                    }
+                }
+            }
+        },
+        field5: {
+            default: 'joe'
+        }
+    }
+}
+```
+
+```js
+object({
+    fielda: object({
+        field1: object({
+        field1: lazy(() => mixed(def('bill'))),
+        field2: conditional(
+            condition('.field3.field4', field => mixed(def(field)))
+        ),
+        }),
+        field3: object({
+        field4: conditional(
+            condition('..field5', field => mixed(def(field)))
+        ),
+        }),
+    }),
+    field5: mixed(def('joe')),
+})
+```
+
+</AstFn>
