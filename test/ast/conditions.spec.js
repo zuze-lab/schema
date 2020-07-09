@@ -1,4 +1,5 @@
-import { matches } from '../../src/ast';
+import { matches, createSchema } from '../../src/ast';
+import { getErrors, getErrorsSync } from '../../src';
 
 describe('ast-conditions', () => {
   it('should create conditional schemas', () => {
@@ -60,5 +61,24 @@ describe('ast-conditions', () => {
     expect(matches(schema, 'not short', then)).toBe(false);
     expect(matches(schema, 5, otherwise)).toBe(false);
     expect(matches(schema, 10, otherwise)).toBe(true);
+  });
+
+  // fixes a bug where the schema was being overridden to mixed upon
+  // resolution of a condition that didn't declare a schema
+  it('should maintain the parent schema after a condition has been resolved', () => {
+    const schema = {
+      schema: 'string',
+      label: 'fred',
+      conditions: [
+        {
+          when: { $someField: { tests: ['required'] } },
+          otherwise: {
+            tests: ['required'],
+          },
+        },
+      ],
+    };
+
+    expect(getErrorsSync(createSchema(schema), '')).toBe('fred is required');
   });
 });

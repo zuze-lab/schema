@@ -64,22 +64,11 @@ const filterValidators = validators => {
 };
 
 const mergeTypes = (next, orig) => {
-  if (next.type === MIXED || orig.type === MIXED) {
-    return {
-      typeCheck: orig.typeCheck,
-      type: orig.type,
-    };
-  }
-
-  if (next.type !== orig.type)
-    throw new Error(
-      `Attempted to change schema type from ${orig.type} to ${next.type} - did you create a bad condition?`
-    );
-
-  return {
-    typeCheck: next.typeCheck,
-    type: next.type,
-  };
+  if (!next.type || next.type === MIXED) return orig;
+  if (orig.type === MIXED || orig.type === next.type) return next;
+  throw new Error(
+    `Attempted to change schema type from ${orig.type} to ${next.type} - did you create a bad condition?`
+  );
 };
 
 export const merge = (def, ...defs) =>
