@@ -25,11 +25,14 @@ const run = (
   // test result must return false, true, or a ValidationError
   // or be a promise that resolves to one of those things
   const testResult = test(value, { schema, options, createError, resolve });
-  if (!testResult) return createError({ message, params });
-  if (isValidationError(testResult)) return testResult;
-  return isThenable(testResult)
-    ? testResult.then(e => (e === true ? undefined : e))
-    : undefined;
+
+  const done = res =>
+    res !== true
+      ? isValidationError(res)
+        ? res
+        : createError({ message, params })
+      : undefined;
+  return isThenable(testResult) ? testResult.then(done) : done(testResult);
 };
 
 const validate = (schema, value, options) => {

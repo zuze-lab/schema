@@ -10,8 +10,17 @@ import {
   isValidSyncAt,
   validateSyncAt,
   isValidSync,
+  createSchema,
+  getErrors,
 } from '../src';
-import { tests, defined, min, max, test as t } from '../src/validators';
+import {
+  tests,
+  defined,
+  min,
+  max,
+  test as t,
+  required,
+} from '../src/validators';
 
 const check = (schema, val, { sync, abortEarly } = {}) =>
   (sync ? validateSync : validate)(schema, val, { sync, abortEarly });
@@ -66,6 +75,22 @@ describe('validate', () => {
 
   it('should throw an error if a non-test is passed to tests', () => {
     expect(() => tests('not a test')).toThrow();
+  });
+
+  // verifies a bug fix with async validation
+  it('should validate async', async () => {
+    await expect(
+      getErrors(
+        mixed(
+          tests(
+            t('custom', async () => false, {
+              check: () => true,
+              message: 'error',
+            })
+          )
+        )
+      )
+    ).resolves.toBe('error');
   });
 
   it('should validateAt', () => {
