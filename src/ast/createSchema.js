@@ -63,7 +63,7 @@ export const createSchema = (
       label: label,
       nullable,
       typeError,
-      condition: createConditions(conditions),
+      condition: createConditions(conditions, options),
       shape: shape
         ? Object.entries(shape).reduce(
             (acc, [field, schema]) => ({

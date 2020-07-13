@@ -2,13 +2,20 @@ import { extend } from '../schema';
 import matches from './matches';
 import { createSchema } from './createSchema';
 
-export const createConditions = (ast = []) => ast.map(createCondition);
+export const createConditions = (ast = [], options) =>
+  ast.map(createCondition(options));
 
-const resolveBranch = (original, branch) =>
-  !branch ? original : extend(createSchema(branch), original);
+const resolveBranch = (original, branch, options) =>
+  !branch ? original : extend(createSchema(branch, options), original);
 
-export const createCondition = ({ when, how = 'some', then, otherwise }) => {
+export const createCondition = opts => ({
+  when,
+  how = 'some',
+  then,
+  otherwise,
+}) => {
   const whens = Array.isArray(when) ? when : [when];
+  console.log(opts);
 
   // object schema validator version
   const refs = whens.reduce(
@@ -32,7 +39,8 @@ export const createCondition = ({ when, how = 'some', then, otherwise }) => {
           )
         )
           ? then
-          : otherwise
+          : otherwise,
+        opts
       );
     },
   };
