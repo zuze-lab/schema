@@ -15,7 +15,6 @@ export const createCondition = opts => ({
   otherwise,
 }) => {
   const whens = Array.isArray(when) ? when : [when];
-  console.log(opts);
 
   // object schema validator version
   const refs = whens.reduce(
