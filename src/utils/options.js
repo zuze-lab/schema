@@ -16,7 +16,7 @@ export const defaults = (opts = {}, schema, value, path) => ({
   context: {},
   strict: false,
   assert: true,
-  messages: messages(opts.messages || {}),
   ...opts,
+  messages: messages(opts.messages),
   from: schema ? [{ schema, value, path }, ...(opts.from || [])] : opts.from,
 });
