@@ -1,5 +1,5 @@
 import { matches } from '../../src/ast';
-import { isValidSync, createSchema, test } from '../../src';
+import { isValidSync, createSchema, test, getErrorsSync } from '../../src';
 
 describe('ast - validators', () => {
   it('should negate', () => {
@@ -26,6 +26,23 @@ describe('ast - validators', () => {
     expect(isValidSync(schema, 'fred')).toBe(true);
     expect(isValidSync(schema, 'joe')).toBe(true);
     expect(isValidSync(schema, 'jim')).toBe(false);
+  });
+
+  it('should allow oneOfType overrides', () => {
+    const schema = createSchema({
+      schema: 'string',
+      tests: [
+        [
+          'oneOfType',
+          [{ tests: [['is', 'fred']] }, { tests: [['is', 'joe']] }],
+          { name: 'badError' },
+        ],
+      ],
+    });
+
+    expect(
+      getErrorsSync(schema, 'bill', { messages: { badError: 'bad' } })
+    ).toBe('bad');
   });
 
   it('should serial', () => {
