@@ -9,6 +9,10 @@ import {
   shape,
   def,
   string,
+  createSchema,
+  validate,
+  validateSync,
+  getErrorsSync,
 } from '../src';
 
 describe('object', () => {
@@ -20,6 +24,50 @@ describe('object', () => {
     const schemaShape = { field1: mixed() };
     expect(() => object(schemaShape)).not.toThrow();
     expect(() => object(shape(schemaShape))).not.toThrow();
+  });
+
+  it('should work with cyclical dependencies', () => {
+    // schemas are cyclical, but they can still resolve by value alone
+    const s = createSchema({
+      schema: 'object',
+      shape: {
+        field: {
+          schema: 'number',
+          conditions: [
+            {
+              when: {
+                field2: {
+                  tests: ['required'],
+                },
+              },
+              otherwise: {
+                tests: ['required'],
+              },
+            },
+          ],
+        },
+        field2: {
+          schema: 'number',
+          conditions: [
+            {
+              when: {
+                field: {
+                  tests: ['required'],
+                },
+              },
+              otherwise: {
+                tests: ['required'],
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    expect(getErrorsSync(s, {}, { abortEarly: false })).toMatchObject({
+      field: 'field is required',
+      field2: 'field2 is required',
+    });
   });
 
   it('should throw if the shape is invalid', () => {

@@ -15,7 +15,13 @@ const ref = path =>
     path,
     type: SchemaType.REF,
     lazy: options => {
-      const { from, context, value, contextPrefix } = options;
+      const {
+        from,
+        context,
+        value,
+        contextPrefix,
+        resolvingFrom = {},
+      } = options;
       const at = options.path ? `at ${options.path}` : '';
 
       // self referencing
@@ -50,15 +56,24 @@ const ref = path =>
         );
       }
 
+      const skipSchema =
+        resolvingFrom[path] && resolvingFrom[path].includes(from[0].schema);
+
+      resolvingFrom[path] = [
+        ...(resolvingFrom[path] || []).concat(from[0].schema),
+      ];
+
       const [nextSchema, nextValue, nextFrom] = resolvePath(
         path,
         from[0].schema,
         from[0].value,
         {
           ...options,
+          resolvingFrom,
           from: from.slice(1),
         },
-        false
+        false,
+        skipSchema
       );
 
       return nextSchema

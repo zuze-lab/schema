@@ -23,19 +23,32 @@ const resolve = (schema, options) =>
 // schemas may need to be resolved during resolve.path
 // if there are conditional shapes, for instance then we can't
 // get subsequent schemas until we resolve the previous ones
-export const resolvePath = (path, schema, value, options, requiresSchema) =>
+
+// need something in here to say we've been here before
+export const resolvePath = (
+  path,
+  schema,
+  value,
+  options,
+  requiresSchema,
+  skipSchema
+) =>
   parts(path).reduce(
     ([schema, value, from], part) => {
       if (value !== undefined) value = value[part];
 
-      const { shape, of } = schema;
-      schema = part.match(/^\d+$/) ? of : shape[part];
-      if (schema) schema = resolve(schema, { ...options, from, value });
+      if (!skipSchema) {
+        const { shape, of } = schema;
+        schema = part.match(/^\d+$/) ? of : shape[part];
+        if (schema) schema = resolve(schema, { ...options, from, value });
 
-      if (!schema && requiresSchema)
-        throw new Error(
-          `Cannot resolve schema from ${path} - failed at ${part}`
-        );
+        if (!schema && requiresSchema)
+          throw new Error(
+            `Cannot resolve schema from ${path} - failed at ${part}`
+          );
+      } else {
+        schema = null;
+      }
 
       return [schema, value, [{ schema, value }, ...from]];
     },
