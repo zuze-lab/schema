@@ -17,7 +17,6 @@ const run = (
   schema
 ) => {
   if (check && !check(value, schema)) return;
-
   const resolve = ref => (isRef(ref) ? cast(ref, undefined, options) : ref);
 
   const createError = errorCreator(value, name, options, schema);
@@ -37,7 +36,6 @@ const run = (
 
 const validate = (schema, value, options) => {
   options = defaults(options);
-
   if (options.at) {
     const [nextSchema, nextValue] = resolvePath(
       options.at,
@@ -63,7 +61,8 @@ const validate = (schema, value, options) => {
         abortEarly ? [new ValidationError(results[0], options)] : results,
         { value, ...options }
       );
-    return value;
+
+    return cast(schema, value, { ...options, _validating: false });
   };
 
   const complete = errs =>
@@ -73,7 +72,7 @@ const validate = (schema, value, options) => {
 
   // cast it before validating
   try {
-    value = cast(schema, value, options);
+    value = cast(schema, value, { ...options, _validating: true });
   } catch (err) {
     return complete([
       err.name === 'TypeError'

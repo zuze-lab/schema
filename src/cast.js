@@ -50,9 +50,10 @@ const cast = (schema, value, options) => {
   );
 
   const innerSchema = inner && inner(schema);
-  const final = innerSchema
-    ? castInner(innerSchema, schema, value, options)
-    : value;
+  const final =
+    innerSchema && !options._validating
+      ? castInner(innerSchema, schema, value, options)
+      : value;
 
   return final !== undefined
     ? final

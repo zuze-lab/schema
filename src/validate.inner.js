@@ -11,7 +11,7 @@ const errors = (run, last, { sync, abortEarly }) => {
     try {
       return run(), last;
     } catch (err) {
-      return [...last, ...err.inner];
+      return [...last, ...(err.inner ? err.inner : [err])];
     }
   }
 
@@ -42,8 +42,8 @@ export default (inner, schema, value, options) =>
             : errors(
                 tick(
                   schemaOrRef,
-                  value[key],
-                  extendOptions(schema, value, key, options)
+                  (value || {})[key],
+                  extendOptions(schema, value || {}, key, options)
                 ),
                 acc,
                 options

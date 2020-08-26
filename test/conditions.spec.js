@@ -105,6 +105,7 @@ describe('conditions', () => {
         otherwise: def('joe'),
       })
     );
+
     expect(
       validateSync(object({ field3 }), { field1: 'jim', field2: 'jim' })
     ).toEqual(expect.objectContaining({ field3: 'bill' }));
