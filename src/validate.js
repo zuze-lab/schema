@@ -115,7 +115,7 @@ const validate = (schema, value, options) => {
     // an function can be passed to do some work to grab other errors
     // used by array/object schemas to get inner errors
     // this function will return an array or errors or an array of promises
-    innerSchema && recursive
+    innerSchema && recursive && value !== undefined
       ? validateInner(innerSchema, schema, value, options)
       : []
   );
