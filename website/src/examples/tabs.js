@@ -3,8 +3,9 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import { mdx } from '@mdx-js/react';
 
-export const ZuzeTabs = ({ children, tabs, default: def }) => (
+export const ZuzeTabs = ({ groupId, children, tabs, default: def }) => (
   <Tabs
+    groupId={groupId}
     defaultValue={def || tabs[0]}
     values={tabs.map(t => ({ label: t, value: t }))}
   >
@@ -19,7 +20,9 @@ export const ZuzeTabs = ({ children, tabs, default: def }) => (
 export const AstFn = ({ children, link }) => {
   return (
     <>
-      <ZuzeTabs tabs={['ast', 'functional']}>{children}</ZuzeTabs>
+      <ZuzeTabs groupId="ast-fn" tabs={['ast', 'functional']}>
+        {children}
+      </ZuzeTabs>
       {link && (
         <>
           <a target="_blank" href={link}>

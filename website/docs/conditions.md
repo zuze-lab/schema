@@ -93,7 +93,7 @@ isValidSync(schema, {fieldA: 8, c: 19}); // true
 
 ## Refs
 
-A ref (i.e. reference) is a pointer to a sibling/ancestor in the value that is being validated or a value from context. They are used in [validators](#validators.md) (where supported) and to resolve conditional schemas. 
+A ref (i.e. reference) is a pointer to a sibling/ancestor in the value that is being validated or a value from context. They are used in [validators](validators.md) (where supported) and to resolve conditional schemas. 
 
 Refs are also accessed via the path notation using [getter](https://www.npmjs.com/package/property-expr#getterexpression--safeaccess-) from [property-expr](https://www.npmjs.com/package/property-expr)
 

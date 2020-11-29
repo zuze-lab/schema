@@ -3,7 +3,7 @@ module.exports = {
   tagline: 'Composable/configurable validation schema',
   url: 'https://zuze-lab.github.io',
   baseUrl: '/schema/',
-  favicon: '',
+  favicon: 'void',
   organizationName: 'zuze-lab', // Usually your GitHub org/user name.
   projectName: 'schema', // Usually your repo name.
   themeConfig: {
@@ -18,7 +18,7 @@ module.exports = {
       //   alt: 'Zuze',
       //   src: 'img/logo.svg',
       // },
-      links: [
+      items: [
         { to: 'docs/getting-started', label: 'Docs', position: 'left' },
         {
           href: 'https://github.com/zuze-lab/schema',
