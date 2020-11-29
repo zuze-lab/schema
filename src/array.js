@@ -1,10 +1,13 @@
 import { SchemaType, isSchema } from './utils';
 import { schema } from './schema';
 import { transforms, array } from './transforms';
+import { isArraySchema } from './utils/definition';
 
 export const of = of => {
-  if (!isSchema(of))
-    throw new Error(`Only schemas are valid as children of the array schema`);
+  if (!isArraySchema(of))
+    throw new Error(
+      `Only schemas or an array of schemas are valid as children of the array schema`
+    );
   return { of };
 };
 

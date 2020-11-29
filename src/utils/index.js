@@ -1,5 +1,10 @@
 import * as SchemaType from './types';
-export { default as definition, isSchema, merge } from './definition';
+export {
+  default as definition,
+  isSchema,
+  merge,
+  isArraySchema,
+} from './definition';
 export { default as combineLazies } from './combine.lazies';
 // export { default as equal } from './equal';
 export { default as messages, messageForError } from './messages';

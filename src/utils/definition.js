@@ -4,6 +4,9 @@ import warn from './warn';
 
 export const isSchema = ({ __isSchema } = {}) => !!__isSchema;
 
+export const isArraySchema = of =>
+  isSchema(of) || (Array.isArray(of) && of.every(isSchema));
+
 export default ({
   type,
   typeError,

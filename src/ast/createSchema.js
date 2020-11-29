@@ -73,7 +73,11 @@ export const createSchema = (
             {}
           )
         : undefined,
-      of: of ? createSchema(of, options) : undefined,
+      of: of
+        ? Array.isArray(of)
+          ? of.map(o => createSchema(o, options))
+          : createSchema(of, options)
+        : undefined,
       meta,
       test: createValidators(tests, options),
       transform: createTransforms(transforms, options),

@@ -16,6 +16,7 @@ import { AstFn, ZuzeTabs } from '../src/examples/tabs';
 - [lazy](#lazy)
 - [object](#object)
 - [array](#array)
+- [tuple](#tuple)
 
 Unlike yup, joi, and ajv, **@zuze/schema** was designed to be functional and that means that it doesn't use methods. All validators can be added to all schemas regardless of if they make sense (but we'll warn you if you're doing something silly) via the [`tests`](utilities.md#tests) function.
 
@@ -301,30 +302,116 @@ object({
 
 ### array
 
-An array schema's subschema (it can only accept one - no support for **ordered** multi-type arrays...yet) is given to it via [of](utilities.md#of)
+An array schema's subschema is given to it via [of](utilities.md#of)
+
+Let's validate the following structure
+
+```js
+{
+   users: [
+       {
+           firstName: 'freddie',
+           lastName: 'mercury'
+       }
+   ]
+}
+```
 
 <AstFn>
 
 ```js
 const schema = {
-    schema: 'array',
-    of: {
-        schema: 'object',
-        shape: {
-            firstName: { schema: 'string' },
-            lastName: { schema: 'string' },
+    schema: 'object',
+    shape: {
+        users: {
+             schema: 'array',
+             of: {
+                 schema: 'object',
+                 shape: {
+                     firstName: { 
+                         schema: 'string', 
+                         tests: ['required'] 
+                     },
+                     lastName: { 
+                        schema: 'string', 
+                        tests: ['required'] 
+                     },
+                 }
+             },
+             tests: [ ['min',4] ] // at least 4 user objects 
         }
     }
 }
 ```
 
 ```js
-array(
-    object({
-        firstName: string(),
-        lastName: string()
-    })
-)
+object({
+    users: array(
+        of(
+            object({
+                firstName: string(tests(required())),
+                lastName: string(tests(required())),
+            })
+        ),
+        tests( min(4) )
+    )
+})
+```
+
+</AstFn>
+
+### tuple
+
+A `tuple` is an fixed length array of values. Instead of having a `tuple` schema, we just use `array` but instead of passing `of` a single schema, we pass it an array of schemas:
+
+Let's look at a similar structure to above:
+
+```js
+{
+    users: [ ['Freddie', 'Mercury'] ]
+}
+```
+
+<AstFn>
+
+```js
+const schema = {
+  schema: 'object',
+  shape: {
+    users: {
+      schema: 'array',
+      of: {
+        schema: 'array',
+        of: [
+          {
+            schema: 'string',
+            label: 'first name',
+            tests: ['required'],
+          },
+          {
+            schema: 'string',
+            label: 'last name',
+            tests: ['required'],
+          },
+        ],
+      },
+      tests: [['min', 4]],
+    },
+  },
+};
+
+```
+
+```js
+object({
+  users: array(
+    array([
+      string(label('first name'), tests(required())),
+      string(label('last name'), tests(required())),
+    ]),
+    tests(min(4))
+  ),
+});
 ```
 
 </AstFn>
